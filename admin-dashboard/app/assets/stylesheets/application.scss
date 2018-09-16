@@ -1,0 +1,58 @@
+@import 'custom_variables';
+@import 'bootstrap';
+@import 'navbar';
+
+body {
+   height: 100%;
+   font-family: sans-serif;
+   background-color: $background-white;
+ }
+
+ .environment-warning {
+   text-align: center;
+   background-size: 40px 40px;
+   color: $background-white;
+   font-size: 14px;
+   padding: 5px;
+ }
+
+ .development {
+   background-color: $development-warning;
+ }
+
+ #banner {
+  width: 100%;
+  padding: 10px;
+  color: $background-white;
+ }
+
+ #menu {
+  background-color: $navbar-text;
+ }
+
+ #page-content-wrapper {
+  width: 100%;
+  position: absolute;
+  padding: 15px;
+  margin-right: -250px;
+  margin-left: 300px;
+  table {
+    width: 70%;
+  }
+}
+
+.dashboard_box {
+  height: 200px;
+  border-style: solid;
+  border-width: 5px;
+  padding: 20px;
+  margin: 20px;
+  color: $navbar-text;
+}
+
+a:hover {
+  .dashboard_box {
+    color: $development-warning;
+  }
+}
+

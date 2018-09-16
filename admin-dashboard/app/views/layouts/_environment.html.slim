@@ -1,0 +1,5 @@
+- unless Rails.env.production?
+  .container-fluid class="environment-warning #{Rails.env}"
+    .row
+      .col-lg-12.text-center
+        .warning You are looking at #{Rails.env.upcase}

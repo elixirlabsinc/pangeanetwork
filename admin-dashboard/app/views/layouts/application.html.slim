@@ -1,0 +1,16 @@
+html
+  = render 'layouts/head'
+  body
+    = render 'layouts/environment'
+    .row#menu
+      h2#banner.text-center= 'Pangea Network - Admin Portal'
+    #wrapper
+      #sidebar-wrapper
+        ul.sidebar-nav
+          = active_link_to 'Dashboard', root_path
+          = active_link_to 'Co-Ops', co_ops_path
+          = active_link_to 'Users', users_path
+          = active_link_to 'Transactions', transactions_path
+          = active_link_to 'Loans', loans_path
+      #page-content-wrapper
+        .container-fluid= yield
