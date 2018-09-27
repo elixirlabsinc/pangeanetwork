@@ -1,0 +1,11 @@
++ ls -alh /
++ read p
++ ns=
++ '[' -s /namespace-file ']'
+++ cat /namespace-file
++ ns='--namespace=kube-proxy '
++ '[' -s /namespace.yaml ']'
++ oc apply --config=/kubeconfig.kubeconfig -f /namespace.yaml
++ '[' -s /rbac.yaml ']'
++ oc process --local -o yaml --ignore-unknown-parameters --param-file=/param-file.txt -f /install.yaml
++ oc apply --namespace=kube-proxy --config=/kubeconfig.kubeconfig -f -

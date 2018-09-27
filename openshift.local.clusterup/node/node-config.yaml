@@ -1,0 +1,45 @@
+allowDisabledDocker: false
+apiVersion: v1
+authConfig:
+  authenticationCacheSize: 1000
+  authenticationCacheTTL: 5m
+  authorizationCacheSize: 1000
+  authorizationCacheTTL: 5m
+dnsBindAddress: 0.0.0.0:8053
+dnsDomain: cluster.local
+dnsIP: ""
+dnsNameservers: null
+dnsRecursiveResolvConf: ""
+dockerConfig:
+  dockerShimRootDirectory: /var/lib/dockershim
+  dockerShimSocket: unix:///var/run/dockershim.sock
+  execHandlerName: native
+enableUnidling: true
+imageConfig:
+  format: openshift/origin-${component}:v3.10
+  latest: false
+iptablesSyncPeriod: 30s
+kind: NodeConfig
+masterClientConnectionOverrides:
+  acceptContentTypes: application/vnd.kubernetes.protobuf,application/json
+  burst: 40
+  contentType: application/vnd.kubernetes.protobuf
+  qps: 20
+masterKubeConfig: node.kubeconfig
+networkConfig:
+  mtu: 1450
+  networkPluginName: ""
+nodeIP: ""
+nodeName: localhost
+podManifestConfig: null
+servingInfo:
+  bindAddress: 0.0.0.0:10250
+  bindNetwork: tcp4
+  certFile: server.crt
+  clientCA: node-client-ca.crt
+  keyFile: server.key
+  namedCertificates: null
+volumeConfig:
+  localQuota:
+    perFSGroup: null
+volumeDirectory: /var/lib/origin/cluster-up/Users/lizzy/elixir-labs/pangeanetwork/openshift.local.clusterup/openshift.local.volumes

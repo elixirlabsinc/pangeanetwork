@@ -1,0 +1,6 @@
++ ls -alh /
++ ns=
++ '[' -s /namespace-file ']'
+++ cat /namespace-file
++ ns='--namespace=openshift '
++ oc apply --namespace=openshift --config=/kubeconfig.kubeconfig -f /list.yaml

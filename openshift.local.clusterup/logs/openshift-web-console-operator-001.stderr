@@ -1,0 +1,16 @@
++ ls -alh /
++ read p
++ ns=
++ '[' -s /namespace-file ']'
+++ cat /namespace-file
++ ns='--namespace=openshift-core-operators '
++ '[' -s /namespace.yaml ']'
++ '[' -s /namespace-file ']'
++ oc apply --config=/kubeconfig.kubeconfig -f -
+++ cat /namespace-file
++ oc create ns openshift-core-operators --config=/kubeconfig.kubeconfig --dry-run -o yaml
++ '[' -s /rbac.yaml ']'
++ oc process --local -o yaml --ignore-unknown-parameters --param-file=/param-file.txt -f /rbac.yaml
++ oc auth reconcile --config=/kubeconfig.kubeconfig -f -
++ oc process --local -o yaml --ignore-unknown-parameters --param-file=/param-file.txt -f /install.yaml
++ oc apply --namespace=openshift-core-operators --config=/kubeconfig.kubeconfig -f -

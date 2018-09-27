@@ -1,0 +1,15 @@
++ ls -alh /
++ read p
++ oc adm policy add-scc-to-user --config=/kubeconfig.kubeconfig privileged system:serviceaccount:openshift-controller-manager:openshift-controller-manager
++ read p
++ ns=
++ '[' -s /namespace-file ']'
+++ cat /namespace-file
++ ns='--namespace=openshift-controller-manager '
++ '[' -s /namespace.yaml ']'
++ oc apply --config=/kubeconfig.kubeconfig -f /namespace.yaml
++ '[' -s /rbac.yaml ']'
++ oc process --local -o yaml --ignore-unknown-parameters --param-file=/param-file.txt -f /rbac.yaml
++ oc auth reconcile --config=/kubeconfig.kubeconfig -f -
++ oc process --local -o yaml --ignore-unknown-parameters --param-file=/param-file.txt -f /install.yaml
++ oc apply --namespace=openshift-controller-manager --config=/kubeconfig.kubeconfig -f -

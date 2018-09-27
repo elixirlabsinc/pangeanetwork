@@ -2030,3 +2030,211 @@ Processing by PageController#index as HTML
 Completed 200 OK in 89ms (Views: 80.8ms | ActiveRecord: 1.3ms)
 
 
+Started GET "/page/index" for 127.0.0.1 at 2018-09-27 11:31:02 -0500
+  
+LoadError (cannot load such file -- /Users/lizzy/elixir-labs/pangeanetwork/admin-dashboard/config/routes.rb):
+  
+activesupport (5.1.4) lib/active_support/dependencies.rb:286:in `load'
+activesupport (5.1.4) lib/active_support/dependencies.rb:286:in `block in load'
+activesupport (5.1.4) lib/active_support/dependencies.rb:258:in `load_dependency'
+activesupport (5.1.4) lib/active_support/dependencies.rb:286:in `load'
+railties (5.1.4) lib/rails/application/routes_reloader.rb:55:in `block in load_paths'
+railties (5.1.4) lib/rails/application/routes_reloader.rb:55:in `each'
+railties (5.1.4) lib/rails/application/routes_reloader.rb:55:in `load_paths'
+railties (5.1.4) lib/rails/application/routes_reloader.rb:18:in `reload!'
+railties (5.1.4) lib/rails/application/routes_reloader.rb:41:in `block in updater'
+activesupport (5.1.4) lib/active_support/file_update_checker.rb:81:in `execute'
+railties (5.1.4) lib/rails/application/routes_reloader.rb:25:in `execute'
+railties (5.1.4) lib/rails/application/finisher.rb:141:in `block (2 levels) in <module:Finisher>'
+activesupport (5.1.4) lib/active_support/callbacks.rb:413:in `instance_exec'
+activesupport (5.1.4) lib/active_support/callbacks.rb:413:in `block in make_lambda'
+activesupport (5.1.4) lib/active_support/callbacks.rb:197:in `block (2 levels) in halting'
+activesupport (5.1.4) lib/active_support/callbacks.rb:601:in `block (2 levels) in default_terminator'
+activesupport (5.1.4) lib/active_support/callbacks.rb:600:in `catch'
+activesupport (5.1.4) lib/active_support/callbacks.rb:600:in `block in default_terminator'
+activesupport (5.1.4) lib/active_support/callbacks.rb:198:in `block in halting'
+activesupport (5.1.4) lib/active_support/callbacks.rb:507:in `block in invoke_before'
+activesupport (5.1.4) lib/active_support/callbacks.rb:507:in `each'
+activesupport (5.1.4) lib/active_support/callbacks.rb:507:in `invoke_before'
+activesupport (5.1.4) lib/active_support/callbacks.rb:130:in `run_callbacks'
+activesupport (5.1.4) lib/active_support/execution_wrapper.rb:108:in `run!'
+activesupport (5.1.4) lib/active_support/reloader.rb:113:in `run!'
+activesupport (5.1.4) lib/active_support/execution_wrapper.rb:70:in `block in run!'
+activesupport (5.1.4) lib/active_support/execution_wrapper.rb:67:in `tap'
+activesupport (5.1.4) lib/active_support/execution_wrapper.rb:67:in `run!'
+activesupport (5.1.4) lib/active_support/reloader.rb:59:in `run!'
+actionpack (5.1.4) lib/action_dispatch/middleware/executor.rb:10:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:59:in `call'
+web-console (3.5.1) lib/web_console/middleware.rb:135:in `call_app'
+web-console (3.5.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (3.5.1) lib/web_console/middleware.rb:18:in `catch'
+web-console (3.5.1) lib/web_console/middleware.rb:18:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (5.1.4) lib/rails/rack/logger.rb:36:in `call_app'
+railties (5.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:69:in `block in tagged'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:26:in `tagged'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:69:in `tagged'
+railties (5.1.4) lib/rails/rack/logger.rb:24:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/remote_ip.rb:79:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/request_id.rb:25:in `call'
+rack (2.0.5) lib/rack/method_override.rb:22:in `call'
+rack (2.0.5) lib/rack/runtime.rb:22:in `call'
+activesupport (5.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:27:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/executor.rb:12:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/static.rb:125:in `call'
+rack (2.0.5) lib/rack/sendfile.rb:111:in `call'
+railties (5.1.4) lib/rails/engine.rb:522:in `call'
+puma (3.10.0) lib/puma/configuration.rb:225:in `call'
+puma (3.10.0) lib/puma/server.rb:605:in `handle_request'
+puma (3.10.0) lib/puma/server.rb:437:in `process_client'
+puma (3.10.0) lib/puma/server.rb:301:in `block in run'
+puma (3.10.0) lib/puma/thread_pool.rb:120:in `block in spawn_thread'
+Started GET "/favicon.ico" for 127.0.0.1 at 2018-09-27 11:31:03 -0500
+  
+ActionController::RoutingError (No route matches [GET] "/favicon.ico"):
+  
+actionpack (5.1.4) lib/action_dispatch/middleware/debug_exceptions.rb:63:in `call'
+web-console (3.5.1) lib/web_console/middleware.rb:135:in `call_app'
+web-console (3.5.1) lib/web_console/middleware.rb:28:in `block in call'
+web-console (3.5.1) lib/web_console/middleware.rb:18:in `catch'
+web-console (3.5.1) lib/web_console/middleware.rb:18:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/show_exceptions.rb:31:in `call'
+railties (5.1.4) lib/rails/rack/logger.rb:36:in `call_app'
+railties (5.1.4) lib/rails/rack/logger.rb:24:in `block in call'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:69:in `block in tagged'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:26:in `tagged'
+activesupport (5.1.4) lib/active_support/tagged_logging.rb:69:in `tagged'
+railties (5.1.4) lib/rails/rack/logger.rb:24:in `call'
+sprockets-rails (3.2.1) lib/sprockets/rails/quiet_assets.rb:13:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/remote_ip.rb:79:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/request_id.rb:25:in `call'
+rack (2.0.5) lib/rack/method_override.rb:22:in `call'
+rack (2.0.5) lib/rack/runtime.rb:22:in `call'
+activesupport (5.1.4) lib/active_support/cache/strategy/local_cache_middleware.rb:27:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/executor.rb:12:in `call'
+actionpack (5.1.4) lib/action_dispatch/middleware/static.rb:125:in `call'
+rack (2.0.5) lib/rack/sendfile.rb:111:in `call'
+railties (5.1.4) lib/rails/engine.rb:522:in `call'
+puma (3.10.0) lib/puma/configuration.rb:225:in `call'
+puma (3.10.0) lib/puma/server.rb:605:in `handle_request'
+puma (3.10.0) lib/puma/server.rb:437:in `process_client'
+puma (3.10.0) lib/puma/server.rb:301:in `block in run'
+puma (3.10.0) lib/puma/thread_pool.rb:120:in `block in spawn_thread'
+Started GET "/page/index" for 127.0.0.1 at 2018-09-27 11:46:24 -0500
+  [1m[35m (1.3ms)[0m  [1m[35mSET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Processing by PageController#index as HTML
+  Rendering page/index.html.slim within layouts/application
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM `co_ops`[0m
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT COUNT(*) FROM `users`[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM `transactions`[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT COUNT(*) FROM `loans`[0m
+  Rendered page/index.html.slim within layouts/application (154.1ms)
+  Rendered layouts/_head.html.slim (514.8ms)
+  Rendered layouts/_environment.html.slim (3.3ms)
+Completed 200 OK in 717ms (Views: 609.0ms | ActiveRecord: 95.7ms)
+
+
+Started GET "/users" for 127.0.0.1 at 2018-09-27 11:46:28 -0500
+Processing by UsersController#index as HTML
+  Rendering users/index.html.slim within layouts/application
+  [1m[35m (0.5ms)[0m  [1m[35mSET NAMES utf8,  @@SESSION.sql_mode = CONCAT(CONCAT(@@sql_mode, ',STRICT_ALL_TABLES'), ',NO_AUTO_VALUE_ON_ZERO'),  @@SESSION.sql_auto_is_null = 0, @@SESSION.wait_timeout = 2147483[0m
+  [1m[36mUser Load (0.8ms)[0m  [1m[34mSELECT `users`.* FROM `users` WHERE (`users`.`role_id` != 1)[0m
+  [1m[36mCoOp Load (0.5ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 1 LIMIT 1[0m
+  [1m[36mRole Load (0.5ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 2 LIMIT 1[0m
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 2 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 1 LIMIT 1[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mRole Load (0.4ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 3 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 1 LIMIT 1[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 4 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 1 LIMIT 1[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.5ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 5 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 1 LIMIT 1[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 6 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 1 LIMIT 1[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 7 LIMIT 1[0m
+  [1m[36mCoOp Load (0.3ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 2 LIMIT 1[0m
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 8 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 9 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 10 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 11 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 12 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 13 LIMIT 1[0m
+  [1m[36mCoOp Load (0.4ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 3 LIMIT 1[0m
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 14 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 15 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 16 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 17 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 18 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 19 LIMIT 1[0m
+  [1m[36mCoOp Load (0.4ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 4 LIMIT 1[0m
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 20 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 4 LIMIT 1[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.5ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 21 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 4 LIMIT 1[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 22 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 4 LIMIT 1[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.5ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 23 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 4 LIMIT 1[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 24 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 4 LIMIT 1[0m  [["id", 4], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 25 LIMIT 1[0m
+  [1m[36mCoOp Load (0.4ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 5 LIMIT 1[0m
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 2 LIMIT 1[0m  [["id", 2], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 26 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 5 LIMIT 1[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 27 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 5 LIMIT 1[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 28 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 5 LIMIT 1[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 29 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 5 LIMIT 1[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.3ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 30 LIMIT 1[0m
+  [1m[36mCACHE CoOp Load (0.0ms)[0m  [1m[34mSELECT  `co_ops`.* FROM `co_ops` WHERE `co_ops`.`id` = 5 LIMIT 1[0m  [["id", 5], ["LIMIT", 1]]
+  [1m[36mCACHE Role Load (0.0ms)[0m  [1m[34mSELECT  `roles`.* FROM `roles` WHERE `roles`.`id` = 3 LIMIT 1[0m  [["id", 3], ["LIMIT", 1]]
+  [1m[36mLoan Load (0.4ms)[0m  [1m[34mSELECT  `loans`.* FROM `loans` WHERE `loans`.`user_id` = 31 LIMIT 1[0m
+  Rendered users/index.html.slim within layouts/application (247.1ms)
+  Rendered layouts/_head.html.slim (23.8ms)
+  Rendered layouts/_environment.html.slim (3.3ms)
+Completed 200 OK in 309ms (Views: 284.2ms | ActiveRecord: 20.0ms)
+
+

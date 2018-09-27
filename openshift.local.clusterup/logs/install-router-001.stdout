@@ -1,0 +1,6 @@
+--> Creating router router ...
+    secret "router-certs" created
+    clusterrolebinding "router-router-role" created
+    deploymentconfig "router" created
+    service "router" created
+--> Success

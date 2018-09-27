@@ -1,0 +1,6 @@
+--> Creating registry registry ...
+    serviceaccount "registry" created
+    clusterrolebinding "registry-registry-role" created
+    deploymentconfig "docker-registry" created
+    service "docker-registry" created
+--> Success
