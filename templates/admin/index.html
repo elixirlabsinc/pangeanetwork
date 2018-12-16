@@ -1,0 +1,13 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+{{ super() }}
+
+<link href="{{ url_for('static', filename='layout.css') }}" rel="stylesheet">
+<div class="row">
+    <h1>Pangea Network Admin Portal</h1>
+    <p class="lead">
+        Recent Transactions
+        <br>
+    </p>
+</div>
+{% endblock body %}
