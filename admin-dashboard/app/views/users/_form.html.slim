@@ -1,0 +1,31 @@
+h1= 'New User'
+
+= form_for @user do |f|
+  .row
+    .col-md-6
+      .form-group
+        = f.label :first_name
+        = f.text_field :first_name, placeholder: 'First Name', class: 'form-control', maxlength: 100, required: true
+    .col-md-6
+      .form-group
+        = f.label :last_name
+        = f.text_field :last_name, placeholder: 'Last Name', class: 'form-control', maxlength: 100, required: true
+  .form-group
+    = f.label :email
+    = f.text_field :email, placeholder: 'Email', class: 'form-control', maxlength: 100, required: true
+  .form-group
+    = f.label :phone
+    = f.text_field :phone, placeholder: 'Phone', class: 'form-control', maxlength: 100, required: true
+  .form-group
+    = f.label :co_op_id
+    = f.select :co_op_id, options_for_select(CoOp.all.pluck(:name, :id))
+  .form-group
+    = f.label :role_id
+    = f.select :role_id, options_for_select(Role.all.pluck(:role_name, :id))
+    br
+  .actions
+    = f.submit 'Submit', class: 'btn btn-primary'
+    = link_to 'Cancel', co_ops_path, class: 'btn btn-link'
+
+javascript:
+  $('.datepicker').datepicker();

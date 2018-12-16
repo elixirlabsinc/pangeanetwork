@@ -1,5 +1,6 @@
 @import 'custom_variables';
 @import 'bootstrap';
+@import 'bootstrap-datepicker';
 @import 'navbar';
 
 body {
@@ -21,7 +22,6 @@ body {
  }
 
  #banner {
-  width: 100%;
   padding: 10px;
   color: $background-white;
  }
@@ -31,7 +31,7 @@ body {
  }
 
  #page-content-wrapper {
-  width: 100%;
+  width: 80%;
   position: absolute;
   padding: 15px;
   margin-right: -250px;
@@ -54,5 +54,9 @@ a:hover {
   .dashboard_box {
     color: $development-warning;
   }
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.5);
 }
 

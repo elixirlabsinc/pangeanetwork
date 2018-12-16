@@ -1,0 +1,18 @@
+h3.text-center= "#{@member.first_name} #{@member.last_name}"
+
+.col-md-6
+  dl.dl-horizontal
+    dt Co Op
+    dd= link_to @member.co_op.name, co_op_path(@member.co_op.id)
+    dt Phone
+    dd= @member.phone
+    dt Role
+    dd= @member.role.role_name.titleize
+    dt Loan Balance
+    dd= @member.loan.try(:balance) || '0'
+    dt Transactions
+    - if @member.loan&.transactions.present?
+      - @member.loan.transactions.each do |transaction|
+        dd= transaction.amount
+    - else 
+      dd None

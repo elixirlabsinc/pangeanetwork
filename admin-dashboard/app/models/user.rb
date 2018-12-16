@@ -22,4 +22,11 @@ class User < ApplicationRecord
 
   validates :phone, :role_id, presence: true
   validates :phone, uniqueness: true
+
+  scope :not_admin, -> { where.not(role_id: 1) }
+  scope :member, -> { where(role_id: 3) }
+
+  def full_name
+    first_name + ' ' + last_name
+  end
 end

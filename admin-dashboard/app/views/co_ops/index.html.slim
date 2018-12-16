@@ -1,8 +1,11 @@
 h1 Co-ops
+.pull-right
+  = button_to 'New', new_co_op_path, method: :get
 .table-responsive
     table.table.table-striped
         thead
             tr
+                th class='col-sm-1' Name
                 th class='col-sm-1' Location
                 th class='col-sm-1' Users
                 th class='col-sm-1' Start Date
@@ -13,21 +16,11 @@ h1 Co-ops
         tbody
         - @co_ops.each do |co_op| 
             tr
+                td= link_to co_op.name, co_op_path(co_op.id)
                 td= co_op.location
                 td= co_op.users.count
                 td= co_op.start_date.strftime('%d/%m/%y')
-                td= co_op.end_date.strftime('%d/%m/%y')
+                td= co_op.end_date&.strftime('%d/%m/%y')
                 td= co_op.initial_balance
                 td= co_op.current_balance
-
-
-/ - @co_ops.each do |co_op|
-/     = co_op.location
-/     ul
-/         li= co_op.phase.phase_type
-/         li= "Users: #{co_op.users.count}"
-/         li= "Start Date: #{co_op.start_date.strftime('%d/%m/%y')}"
-/         li= "End Date: #{co_op.end_date.strftime('%d/%m/%y')}"
-/         li= "Initial Balance: #{co_op.initial_balance}"
-/         li= "Current Balance: #{co_op.current_balance}"
         

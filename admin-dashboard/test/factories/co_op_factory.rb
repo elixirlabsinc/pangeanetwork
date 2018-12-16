@@ -20,5 +20,8 @@ FactoryBot.define do
     phase
     sequence(:name) { |n| "Co-Op #{n}" }
     is_active { true }
+    location { Faker::HarryPotter.location }
+    start_date { rand(3..7).years.ago }
+    end_date { rand(3..7).years.from_now }
   end
 end

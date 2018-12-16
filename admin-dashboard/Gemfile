@@ -41,6 +41,7 @@ gem 'devise'
 gem 'devise_invitable'
 
 gem 'awesome_print'
+gem 'bootstrap-datepicker-rails'
 gem 'slim-rails'
 
 group :development, :test do
@@ -69,6 +70,7 @@ group :development do
 end
 
 group :test do
+  gem 'bundler-audit'
   gem 'factory_bot'
   gem 'minitest'
   gem 'shoulda', '~> 3.5'

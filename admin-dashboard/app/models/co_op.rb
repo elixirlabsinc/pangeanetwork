@@ -18,4 +18,6 @@
 class CoOp < ApplicationRecord
   has_many :users
   belongs_to :phase
+
+  validates :name, :phase_id, :start_date, :location, :is_active, presence: true
 end
