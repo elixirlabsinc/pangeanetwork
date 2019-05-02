@@ -1,5 +1,6 @@
 import os
 import os.path as op
+from datetime import datetime
 from flask import Flask
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
@@ -14,7 +15,7 @@ db = SQLAlchemy(app)
 
 username = "sandbox"   
 api_key = os.environ.get('AT_API_KEY')   
-test_number = "+254723963007"  
+test_number = "+254123456789"  
 
 def test_text():
   africastalking.initialize(username, api_key)
@@ -24,25 +25,61 @@ def test_text():
 
   # Use the service synchronously
   try:
-    response = sms.send("Hello Message!", [test_number])
+    response = sms.send("~*~*~Testing text send from Africa's Talking API~*~*~", [test_number])
     print (response)
   except Exception as e:
     print ('Encountered an error while sending: %s' % str(e))
 
-def add_transaction(data):
-  user_phone = data.getlist('from')[0]
-  user = User.query.filter(User.phone == user_phone).first()
-  amount = int(data.getlist('text')[0].split()[1])
-  loan_balance = user.loan.balance
+def add_transaction(from_user, msg):
+  leader_phone = from_user
+  leader = User.query.filter(User.phone == leader_phone).first()
+  # TODO: check to make sure user exists, is leader
+  member_phone = msg[1]
+  member = User.query.filter(User.phone == member_phone).first()
+  # TODO: prompt new user if record not found
+  amount = int(msg[2])
+  loan_balance = member.loan.balance
   new_user_transaction = Transaction(
-    loan=[user.loan],
-    user=[user],
+    loan=[member.loan],
     amount=amount,
     previous_balance=loan_balance,
-    new_balance=loan_balance - amount
+    new_balance=loan_balance - amount,
+    state='initiated'
   )
+  member.transactions.append(new_user_transaction)
+  db.session.add(member)
   db.session.add(new_user_transaction)
   db.session.commit()
+  africastalking.initialize(username, api_key)
+  sms = africastalking.SMS
+  try:
+    leader_text = sms.send("Transaction added. Requesting confirmation from " + str(member_phone), [leader_phone])
+    member_text = sms.send("Your Co-Op Leader has added a " + amount + " repayment transaction for your loan. \
+    Please respond with 'Y' to confirm this transaction is accurate or 'N' to reject it." + str(loan_balance - amount), [member_phone])
+    print (leader_text)
+    print (member_text)
+  except Exception as e:
+    print ('Encountered an error while sending: %s' % str(e))
+
+def confirm_transaction(from_user):
+  member = User.query.filter(User.phone == from_user).first()
+  # TODO: return error message if user does not exist
+  user_transaction = member.transactions.last
+  # TODO: return notice message if transaction has already been confirmed
+  if user_transaction.state == 'initiated':
+    user_transaction.state = 'confirmed'
+    member.loan.balance = user_transaction.new_balance
+    sms = africastalking.SMS
+
+    db.session.add(member)
+    db.session.add(user_transaction)
+    db.session.commit()
+    try:
+      member_text = sms.send("Transaction complete. New loan balance is " + str(member.loan.balance), [from_user])
+      print (member_text)
+    except Exception as e:
+      print ('Encountered an error while sending: %s' % str(e))
+
 
 # Models
 roles_users = db.Table(
@@ -86,6 +123,7 @@ class CoOp(db.Model):
   initial_balance = db.Column(db.Integer())
   expected_repayment = db.Column(db.Integer())
   current_balance = db.Column(db.Integer())
+  users = db.relationship('User', uselist=False, backref='co_op')
 
   def __str__(self):
     return self.name
@@ -95,6 +133,7 @@ class Role(db.Model):
   id = db.Column(db.Integer(), primary_key=True)
   name = db.Column(db.String(80), unique=True)
   description = db.Column(db.String(255))
+  users = db.relationship('User', uselist=False, backref='role')
 
   def __str__(self):
     return self.name
@@ -109,11 +148,11 @@ class User(db.Model):
   password = db.Column(db.String(255))
   active = db.Column(db.Boolean())
   confirmed_at = db.Column(db.DateTime())
+  co_op_id = db.Column(db.Integer, db.ForeignKey('co_op.id'))
+  role_id = db.Column('Role', db.ForeignKey('role.id'))
   loan = db.relationship('Loan', uselist=False, backref='user')
-  co_ops = db.relationship('CoOp', secondary=co_ops_users,
-                          backref=db.backref('users', lazy='dynamic'))
-  roles = db.relationship('Role', secondary=roles_users,
-                          backref=db.backref('users', lazy='dynamic'))
+  transactions = db.relationship('Transaction', secondary=transactions_users,
+                                 backref='users', lazy='dynamic')
 
   def __str__(self):
     return self.email
@@ -131,9 +170,10 @@ class Transaction(db.Model):
   amount = db.Column(db.Integer)
   previous_balance = db.Column(db.Integer)
   new_balance = db.Column(db.Integer)
+  state = db.Column(db.String(255))
+  timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
   loan = db.relationship('Loan', secondary=transactions_loans,
-                          backref=db.backref('transactions', lazy='dynamic'))
-  user = db.relationship('User', secondary=transactions_users,
                           backref=db.backref('transactions', lazy='dynamic'))
 
 # Customized admin interface
@@ -154,29 +194,33 @@ class UserAdmin(CustomView):
 def index():
   if request.method == 'GET':
     return '<a href="/admin/">Click me to get to Admin!</a>'
+  
+  # text receive
   if request.method == 'POST':
-    msg = request.form.getlist('text')
-    cmd = msg[0].split()[0]
+    from_user = request.form.getlist('from')[0]
+    msg = request.form.getlist('text')[0].split()
+    cmd = msg[0]
     if cmd.lower() == 'loan':
-      add_transaction(request.form)
+      add_transaction(from_user, msg)
       return 'success: added loan transaction'
+    elif cmd.lower() == 'y':
+      confirm_transaction(from_user)
+    elif cmd.lower() == 'n':
+      return 'transaction denied'
+      # TODO: remove transaction
+    else:
+      return 'error'
+      # TODO: handle error
     # ImmutableMultiDict([
     #   ('linkId', '04c0d31e-e16a-42b9-aa3b-2157c79e4c82'), 
-    #   ('text', 'LOAN 500'), 
+    #   ('text', '254987654321 LOAN 500'), 
     #   ('to', '7635'), 
     #   ('id', '86b65912-d4ac-44f3-b912-c7a046134836'), 
     #   ('date', '2019-02-03 09:52:15'), 
-    #   ('from', '+254723963007')
+    #   ('from', '+254123456789')
     #   ])
-    print(data)
+    print(request.form)
     return 'success'
-
-
-@app.route('/get_messages')
-def get_messages():
-  test_receive()
-  return 'message sent!'
-  
 
 # Admin interface
 admin = admin.Admin(app, name='Pangea Network', template_mode='bootstrap3')
@@ -235,16 +279,16 @@ def build_sample_db():
       last_name='User',
       email='admin',
       password='admin',
-      phone='+254723963000',
-      roles=[super_user_role]
+      phone='254123456789',
+      role_id=super_user_role.id
     )
     test_user = User(
       first_name='Test',
       last_name='User',
       email='test@user.com',
       password='12345',
-      phone=test_number,
-      roles=[user_role]
+      phone='254987654321',
+      role_id=user_role.id
     )
     db.session.add(admin_user)
     db.session.add(test_user)
@@ -256,16 +300,6 @@ def build_sample_db():
       interest=2,
     )
     db.session.add(test_user_loan)
-    db.session.commit()
-
-    test_user_transaction = Transaction(
-      loan=[test_user_loan],
-      user=[test_user],
-      amount=50,
-      previous_balance=2000,
-      new_balance=1950
-    )
-    db.session.add(test_user_transaction)
     db.session.commit()
 
   return

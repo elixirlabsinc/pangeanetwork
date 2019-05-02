@@ -7,9 +7,15 @@ body {
 
 .navbar-default {
   background-color: #262164;
+  padding-top: 100px;
+  margin: auto;
 }
 
-a {
+.navbar-default .navbar-nav>.active>a {
+  border-bottom: 5px solid #CEA02B;
+}
+
+a, a:hover {
   color: #CEA02B;
 }
 
