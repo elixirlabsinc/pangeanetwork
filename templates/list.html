@@ -1,8 +1,16 @@
 {% extends 'admin/model/list.html' %}
 {% import 'admin/model/layout.html' as model_layout with context %}
 
+{% block head_tail %}
+  {{ super() }}
+  <link href="{{ url_for('static', filename='layout.css') }}" rel="stylesheet">
+{% endblock %}
+
+
+{% block model_menu_bar %}
+{% endblock %}
+
 {% block brand %}
-    <h2 id="brand">{{ admin_view.name|capitalize }} </h2>
     {% if admin_view.can_create %}
     <div class="btn-menu">
       <a href="{{ url_for('.create_view', url=return_url) }}" class="btn btn-primary pull-right">{{ _gettext('Create') }}</a>
@@ -28,7 +36,4 @@
     {% endif %}
     <div class="clearfix"></div>
     <hr>
-{% endblock %}
-
-{% block model_menu_bar %}
 {% endblock %}
