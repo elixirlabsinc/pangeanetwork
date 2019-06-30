@@ -5,7 +5,9 @@ from flask import Flask
 from flask_cors import CORS
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
+from flask import Response
 import africastalking
+import json
 
 import flask_admin as admin
 from flask_admin.contrib.sqla import ModelView
@@ -17,7 +19,7 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 username = "sandbox"   
-api_key = os.environ.get('AT_API_KEY')
+api_key = os.environ.get('AT_API_KEY')   
 test_number = "+254123456789"  
 
 def test_text():
@@ -227,7 +229,22 @@ def index():
 
 @app.route('/transactions', methods = ['GET'])
 def transactions():
-  return  '{ "results": [ {"name":"John", "age":"30", "city":"New York"}, {"name":"Mary", "age":"30", "city":"New York"}, {"name":"Stacy", "age":"30", "city":"New York"} ] }'
+  sample_results = {
+    "data": [
+      {
+        "name": "John",
+        "age": "30",
+        "city": "New York"
+      },
+      {
+        "name": "Mary",
+        "age": "28",
+        "city": "New York"
+      }
+    ]
+  }
+
+  return Response(json.dumps(sample_results),  mimetype='application/json')
 
 # Admin interface
 admin = admin.Admin(app, name='Pangea Network', template_mode='bootstrap3')
@@ -316,7 +333,7 @@ if __name__ == '__main__':
   # Build a sample db on the fly, if one does not exist yet.
   app_dir = os.path.realpath(os.path.dirname(__file__))
   database_path = os.path.join(app_dir, app.config['DATABASE_FILE'])
-  if os.path.exists(database_path):
+  if not os.path.exists(database_path):
     build_sample_db()
   test_text()
 

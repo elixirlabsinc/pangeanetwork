@@ -24,8 +24,8 @@ class Content extends Component {
     .then(results => {
       return results.json();
     })
-    .then(data => {
-      this.setState({data: data.results});
+    .then(results => {
+      this.setState({data: results.data});
     })
   }
 
@@ -34,13 +34,13 @@ class Content extends Component {
       <ContentDiv>
         <ContentArea>
           <p>Content</p>
-          {/* <div>
+          <div>
             {this.state.data.map(({name, age, city}) => {
               return (
                 <p key={name}>name: {name}, age: {age}, city: {city}</p>
               )
             })}
-          </div> */}
+          </div>
         </ContentArea>
       </ContentDiv>
     );
