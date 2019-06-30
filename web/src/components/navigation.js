@@ -17,7 +17,10 @@ const NavigationListItem = styled.li`
   text-align: center;
   padding: 0px 60px
   justify-content: center;
-  @media(max-width: 600px) {
+  @media(min-width: 768px) and (max-width: 1080px) {
+    padding: 0px 32px;
+  }
+  @media(max-width: 768px)  {
     display: block;
     padding: 12px 0px;
   }
@@ -25,9 +28,9 @@ const NavigationListItem = styled.li`
 
 const NavigationLink = styled.a`
   color: #ffffff;
-  font-size: 15px;
+  font-size: 16px;
   text-decoration: none;
-  padding-bottom: 4px;
+  padding: 0px 20px 4px 20px;
   &:active, &:hover {
     border-bottom: 4px solid #CEA02B;
   }

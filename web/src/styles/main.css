@@ -13,17 +13,3 @@ a {
   color: #ffffff;
   text-decoration: none;
 }
-
-/* larger screen */
-@media(min-width: 1200px) {
-  body {
-    width: 80%;
-  }
-}
-
-/* mobile view */
-@media(max-width: 600px) {
-  body {
-    width: 100%;
-  }
-}

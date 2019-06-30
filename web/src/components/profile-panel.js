@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import profileIcon from '../img/profileIcon.png'
 
-const ProfilePanelDiv = styled.div`
+const ProfilePanelDiv = styled.a`
   background-color: #262164;
   float: right;
-  padding: 0px 24px;
   color: #fff;
   font-size: 14px;
-`;
-
-const ProfileLink = styled.a`
-  padding: 0px 12px;
+  padding: 8px 12px;
   color: #ffffff;
   text-decoration: none;
+  &:active, &:hover {
+    border-bottom: 4px solid #CEA02B;
+  }
+`;
+
+const ProfileLink = styled.span`
+  padding: 0px 12px;
 `;
 
 const ProfileIcon = styled.img`
@@ -25,8 +28,8 @@ const ProfileIcon = styled.img`
 class ProfilePanel extends Component {
   render() {
     return (
-      <ProfilePanelDiv>
-        <ProfileLink href="/">Jamie Liao</ProfileLink>
+      <ProfilePanelDiv href="/">
+        <ProfileLink>Jamie Liao</ProfileLink>
         <ProfileIcon src={profileIcon} />
       </ProfilePanelDiv>
     );
