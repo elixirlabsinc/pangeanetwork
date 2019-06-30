@@ -1,0 +1,25 @@
+@import './fonts.css';
+
+body {
+  margin: 0px;
+  padding: 0px;
+  margin: auto;
+  font-family: Questrial;
+  width: 100%;
+};
+
+/* larger screen */
+@media(min-width: 1200px) {
+  body {
+    width: 80%;
+    background-color: pink;
+  }
+}
+
+/* mobile view */
+@media(max-width: 600px) {
+  body {
+    width: 100%;
+    background-color: purple;
+  }
+}

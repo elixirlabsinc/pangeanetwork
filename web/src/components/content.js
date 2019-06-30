@@ -17,7 +17,7 @@ class Content extends Component {
       this.setState({data: data.results});
     })
   }
-  
+
   render() {
     return (
       <React.Fragment>
@@ -25,7 +25,7 @@ class Content extends Component {
         <div>
           {this.state.data.map(({name, age, city}) => {
             return (
-              <p>name: {name}, age: {age}, city: {city}</p>
+              <p key={name}>name: {name}, age: {age}, city: {city}</p>
             )
           })}
         </div>
