@@ -11,6 +11,23 @@ const ContentArea = styled.div`
   padding: 12px;
 `;
 
+const CoopTable = styled.div`
+  width: 100%;
+  display: inline-grid;
+  grid-template-columns: 2fr 1fr 2fr 1fr 1fr;
+  grid-template-rows: auto;
+`;
+
+const CoopField = styled.div`
+  background-color: #FFFFFF;
+  padding: 12px;
+  margin: 2px;
+  font-family: Comfortaa;
+  font-size: 12px;
+  line-height: 14px;
+  vertical-align: middle;
+`;
+
 class Content extends Component {
   constructor() {
     super();
@@ -33,14 +50,17 @@ class Content extends Component {
     return (
       <ContentDiv>
         <ContentArea>
-          <p>Content</p>
-          <div>
-            {this.state.data.map(({name, age, city}) => {
+            {this.state.data.map(({name, coop, phone, role, loan_balance}) => {
               return (
-                <p key={name}>name: {name}, age: {age}, city: {city}</p>
+                <CoopTable key={name}>
+                  <CoopField>{name}</CoopField>
+                  <CoopField>{coop}</CoopField>
+                  <CoopField>{phone}</CoopField>
+                  <CoopField>{role}</CoopField>
+                  <CoopField>{loan_balance}</CoopField>
+                </CoopTable>
               )
             })}
-          </div>
         </ContentArea>
       </ContentDiv>
     );

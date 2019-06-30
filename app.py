@@ -19,7 +19,7 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 username = "sandbox"   
-api_key = os.environ.get('AT_API_KEY')   
+api_key = os.environ.get('AT_API_KEY')  
 test_number = "+254123456789"  
 
 def test_text():
@@ -232,14 +232,39 @@ def transactions():
   sample_results = {
     "data": [
       {
-        "name": "John",
-        "age": "30",
-        "city": "New York"
+        "name": "Anne",
+        "coop": "Co-Op 1",
+        "phone": "+254 736 123 1234",
+        "role": "Officer",
+        "loan_balance": "1743"
       },
       {
         "name": "Mary",
-        "age": "28",
-        "city": "New York"
+        "coop": "Co-Op 2",
+        "phone": "+254 736 123 5678",
+        "role": "Members",
+        "loan_balance": "9873"
+      },
+      {
+        "name": "Jane",
+        "coop": "Co-Op 1",
+        "phone": "+254 736 321 1234",
+        "role": "Members",
+        "loan_balance": "3828"
+      },
+      {
+        "name": "Julie",
+        "coop": "Co-Op 2",
+        "phone": "+254 736 111 1234",
+        "role": "Members",
+        "loan_balance": "183"
+      },
+      {
+        "name": "Susan",
+        "coop": "Co-Op 1",
+        "phone": "+254 736 123 222",
+        "role": "Members",
+        "loan_balance": "15"
       }
     ]
   }
