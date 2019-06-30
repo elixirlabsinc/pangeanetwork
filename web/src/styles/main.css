@@ -6,13 +6,18 @@ body {
   margin: auto;
   font-family: Questrial;
   width: 100%;
+  background-color: #F6F9FC;
 };
+
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
 
 /* larger screen */
 @media(min-width: 1200px) {
   body {
     width: 80%;
-    background-color: pink;
   }
 }
 
@@ -20,6 +25,5 @@ body {
 @media(max-width: 600px) {
   body {
     width: 100%;
-    background-color: purple;
   }
 }

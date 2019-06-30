@@ -27,6 +27,10 @@ const NavigationLink = styled.a`
   color: #ffffff;
   font-size: 15px;
   text-decoration: none;
+  padding-bottom: 4px;
+  &:active, &:hover {
+    border-bottom: 4px solid #CEA02B;
+  }
 `;
 
 
@@ -38,16 +42,16 @@ class Navigation extends Component {
           <NavigationLink href="/">Dashboards</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/">Co-Ops</NavigationLink>
+          <NavigationLink href="/coops">Co-Ops</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/">Members</NavigationLink>
+          <NavigationLink href="/members">Members</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/">Transactions</NavigationLink>
+          <NavigationLink href="/transactions">Transactions</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/">Loans</NavigationLink>
+          <NavigationLink href="/loans">Loans</NavigationLink>
           </NavigationListItem>
       </NavigationList>
     );

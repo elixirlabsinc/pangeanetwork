@@ -22,13 +22,13 @@ class Content extends Component {
     return (
       <React.Fragment>
         <p>Content</p>
-        <div>
+        {/* <div>
           {this.state.data.map(({name, age, city}) => {
             return (
               <p key={name}>name: {name}, age: {age}, city: {city}</p>
             )
           })}
-        </div>
+        </div> */}
       </React.Fragment>
     );
   }
