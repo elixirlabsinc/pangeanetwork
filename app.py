@@ -2,14 +2,19 @@ import os
 import os.path as op
 from datetime import datetime
 from flask import Flask
+from flask_cors import CORS
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
+from flask import Response
 import africastalking
+import json
 
 import flask_admin as admin
 from flask_admin.contrib.sqla import ModelView
 
 app = Flask(__name__)
+# TODO(aashni): check if CORS setup is correct
+CORS(app)
 app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
@@ -240,6 +245,50 @@ def index():
     #   ])
     print(request.form)
     return 'success'
+
+@app.route('/transactions', methods = ['GET'])
+def transactions():
+  sample_results = {
+    "data": [
+      {
+        "name": "Anne",
+        "coop": "Co-Op 1",
+        "phone": "+254 736 123 1234",
+        "role": "Officer",
+        "loan_balance": "1743"
+      },
+      {
+        "name": "Mary",
+        "coop": "Co-Op 2",
+        "phone": "+254 736 123 5678",
+        "role": "Members",
+        "loan_balance": "9873"
+      },
+      {
+        "name": "Jane",
+        "coop": "Co-Op 1",
+        "phone": "+254 736 321 1234",
+        "role": "Members",
+        "loan_balance": "3828"
+      },
+      {
+        "name": "Julie",
+        "coop": "Co-Op 2",
+        "phone": "+254 736 111 1234",
+        "role": "Members",
+        "loan_balance": "183"
+      },
+      {
+        "name": "Susan",
+        "coop": "Co-Op 1",
+        "phone": "+254 736 123 222",
+        "role": "Members",
+        "loan_balance": "15"
+      }
+    ]
+  }
+
+  return Response(json.dumps(sample_results),  mimetype='application/json')
 
 # Admin interface
 admin = admin.Admin(app, name='Pangea Network', template_mode='bootstrap3')

@@ -1,0 +1,15 @@
+@import './fonts.css';
+
+body {
+  margin: 0px;
+  padding: 0px;
+  margin: auto;
+  font-family: Questrial;
+  width: 100%;
+  background-color: #F6F9FC;
+};
+
+a {
+  color: #ffffff;
+  text-decoration: none;
+}
