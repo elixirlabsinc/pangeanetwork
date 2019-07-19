@@ -19,8 +19,10 @@ app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
 username = "sandbox"   
-api_key = os.environ.get('AT_API_KEY')  
-test_number = "+254123456789"  
+api_key = os.environ.get('AT_API_KEY')   
+test_number = "+254123456789"
+africastalking.initialize(username, api_key)
+sms = africastalking.SMS
 
 def test_text():
   africastalking.initialize(username, api_key)
@@ -36,12 +38,14 @@ def test_text():
     print ('Encountered an error while sending: %s' % str(e))
 
 def add_transaction(from_user, msg):
-  leader_phone = from_user
+  leader_phone = int(from_user)
+  print(leader_phone)
   leader = User.query.filter(User.phone == leader_phone).first()
   # TODO: check to make sure user exists, is leader
   member_phone = msg[1]
   member = User.query.filter(User.phone == member_phone).first()
-  # TODO: prompt new user if record not found
+  if member == None:
+    return send_error(leader_phone)
   amount = int(msg[2])
   loan_balance = member.loan.balance
   new_user_transaction = Transaction(
@@ -58,23 +62,29 @@ def add_transaction(from_user, msg):
   africastalking.initialize(username, api_key)
   sms = africastalking.SMS
   try:
-    leader_text = sms.send("Transaction added. Requesting confirmation from " + str(member_phone), [leader_phone])
-    member_text = sms.send("Your Co-Op Leader has added a " + amount + " repayment transaction for your loan. \
-    Please respond with 'Y' to confirm this transaction is accurate or 'N' to reject it." + str(loan_balance - amount), [member_phone])
+    leader_text = sms.send("Transaction added. Requesting confirmation from " + str(member_phone), ['+' + str(leader_phone)])
+    member_text = sms.send("Your Co-Op Leader has added a " + str(amount) + " repayment transaction for your loan. \
+    Please respond with 'Y' to confirm this transaction is accurate or 'N' to reject it. Your new balance will be: " + str(loan_balance - amount), ['+' + str(member_phone)])
     print (leader_text)
     print (member_text)
+    return 'success: added loan transaction'
   except Exception as e:
     print ('Encountered an error while sending: %s' % str(e))
+    return 'Encountered an error while sending: %s' % str(e)
+
+def send_error(sender_phone):
+  error_text = sms.send("The user you are trying to update does not exist in our database. Please text {user number} ADD if you would like to add them", ['+' + str(sender_phone)])
+  print(error_text)
+  return 'error: user does not exist'
 
 def confirm_transaction(from_user):
-  member = User.query.filter(User.phone == from_user).first()
+  member = User.query.filter(User.phone == int(from_user)).first()
   # TODO: return error message if user does not exist
-  user_transaction = member.transactions.last
+  user_transaction = member.transactions.all()[-1]
   # TODO: return notice message if transaction has already been confirmed
   if user_transaction.state == 'initiated':
     user_transaction.state = 'confirmed'
     member.loan.balance = user_transaction.new_balance
-    sms = africastalking.SMS
 
     db.session.add(member)
     db.session.add(user_transaction)
@@ -202,12 +212,21 @@ def index():
   
   # text receive
   if request.method == 'POST':
-    from_user = request.form.getlist('from')[0]
+    try:
+      from_user = request.form.getlist('from')[0]
+      print(from_user)
+    except:
+      from_user = None
+    if from_user == None:
+      return 'failure: request error'
     msg = request.form.getlist('text')[0].split()
     cmd = msg[0]
+    print(msg)
+    print(cmd)
     if cmd.lower() == 'loan':
-      add_transaction(from_user, msg)
-      return 'success: added loan transaction'
+      if len(msg) != 3:
+        return 'error' 
+      return add_transaction(from_user, msg)
     elif cmd.lower() == 'y':
       confirm_transaction(from_user)
     elif cmd.lower() == 'n':
