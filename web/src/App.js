@@ -2,6 +2,7 @@ import React from 'react';
 import logo from './logo.svg';
 import Header from './components/header';
 import Content from './components/content';
+import Transactions from './components/transactions';
 import styled from 'styled-components';
 import './styles/main.css';
 
@@ -9,10 +10,12 @@ const PangeaNetworkDiv = styled.div`
 `;
 
 function App() {
+  const action = window.location.pathname;
+  const content = action === '/members' ? <Content /> : <Transactions />
   return (
     <PangeaNetworkDiv>
       <Header />
-      <Content />
+      {content}
     </PangeaNetworkDiv>
   );
 }

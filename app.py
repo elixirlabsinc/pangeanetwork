@@ -53,7 +53,8 @@ def add_transaction(from_user, msg):
     amount=amount,
     previous_balance=loan_balance,
     new_balance=loan_balance - amount,
-    state='initiated'
+    state='initiated',
+    user_id=member.id
   )
   member.transactions.append(new_user_transaction)
   db.session.add(member)
@@ -73,7 +74,7 @@ def add_transaction(from_user, msg):
     return 'Encountered an error while sending: %s' % str(e)
 
 def send_error(sender_phone):
-  error_text = sms.send("The user you are trying to update does not exist in our database. Please text {user number} ADD if you would like to add them", ['+' + str(sender_phone)])
+  error_text = sms.send("The user you are trying to update does not exist in our database. Please text <ADD {user number}> if you would like to add them", ['+' + str(sender_phone)])
   print(error_text)
   return 'error: user does not exist'
 
@@ -248,47 +249,63 @@ def index():
 
 @app.route('/transactions', methods = ['GET'])
 def transactions():
-  sample_results = {
-    "data": [
+  data = []
+  transactions = Transaction.query.order_by(Transaction.timestamp.desc()).all()
+  for transaction in transactions:
+    user = User.query.filter(User.id == transaction.user_id).first()
+    data.append(
       {
-        "name": "Anne",
-        "coop": "Co-Op 1",
-        "phone": "+254 736 123 1234",
-        "role": "Officer",
-        "loan_balance": "1743"
-      },
-      {
-        "name": "Mary",
-        "coop": "Co-Op 2",
-        "phone": "+254 736 123 5678",
-        "role": "Members",
-        "loan_balance": "9873"
-      },
-      {
-        "name": "Jane",
-        "coop": "Co-Op 1",
-        "phone": "+254 736 321 1234",
-        "role": "Members",
-        "loan_balance": "3828"
-      },
-      {
-        "name": "Julie",
-        "coop": "Co-Op 2",
-        "phone": "+254 736 111 1234",
-        "role": "Members",
-        "loan_balance": "183"
-      },
-      {
-        "name": "Susan",
-        "coop": "Co-Op 1",
-        "phone": "+254 736 123 222",
-        "role": "Members",
-        "loan_balance": "15"
+        "amount": transaction.amount, 
+        "previous_balance": transaction.previous_balance,
+        "new_balance": transaction.new_balance, 
+        "state": transaction.state,
+        "user_name": user.first_name + ' ' + user.last_name,
+        "timestamp": transaction.timestamp 
       }
-    ]
-  }
+    )
+  results = { "data": data }
 
-  return Response(json.dumps(sample_results),  mimetype='application/json')
+  return Response(json.dumps(results, default=str),  mimetype='application/json')
+
+@app.route('/members', methods = ['GET'])
+def members():
+  data = []
+  users = User.query.all()
+  for user in users:
+    data.append(
+      {
+        "name": user.first_name + ' ' + user.last_name, 
+        "coop": CoOp.query.filter(CoOp.id == user.co_op_id).first().name,
+        "phone": user.phone, 
+        "role": Role.query.filter(Role.id == user.role_id).first().name,
+        "loan_balance": user.loan.balance if user.loan else 'N/A'
+      }
+    )
+  results = { "data": data }
+
+  return Response(json.dumps(results, default=str),  mimetype='application/json')
+
+@app.route('/coops', methods = ['GET'])
+def coops():
+  data = []
+  coops = CoOp.query.all()
+  for coop in coops:
+    data.append(
+      {
+        "name": co_op.name, 
+        "start_date": coop.start_date,
+        "end_date": coop.end_date, 
+        "location": coop.location,
+        "interest": coop.interest,
+        "initial_balance": coop.initial_balance,
+        "current_balance": coop.current_balance,
+        "expected_repayment": coop.expected_repayment
+      }
+    )
+  results = { "data": data }
+
+  return Response(json.dumps(results),  mimetype='application/json')
+
 
 # Admin interface
 admin = admin.Admin(app, name='Pangea Network', template_mode='bootstrap3')
@@ -348,7 +365,8 @@ def build_sample_db():
       email='admin',
       password='admin',
       phone='254123456789',
-      role_id=super_user_role.id
+      role_id=super_user_role.id,
+      co_op_id = co_op_1.id
     )
     test_user = User(
       first_name='Test',
@@ -356,7 +374,8 @@ def build_sample_db():
       email='test@user.com',
       password='12345',
       phone='254987654321',
-      role_id=user_role.id
+      role_id=user_role.id,
+      co_op_id = co_op_1.id
     )
     db.session.add(admin_user)
     db.session.add(test_user)

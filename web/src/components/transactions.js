@@ -14,7 +14,7 @@ const ContentArea = styled.div`
 const CoopTable = styled.div`
   width: 100%;
   display: inline-grid;
-  grid-template-columns: 2fr 1fr 2fr 1fr 1fr;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
 `;
 
@@ -42,7 +42,7 @@ const HeaderField = styled.div`
   color: #262164;
 `;
 
-class Content extends Component {
+class Transactions extends Component {
   constructor() {
     super();
     this.state = {
@@ -51,7 +51,7 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    fetch('http://localhost:5000/members')
+    fetch('http://localhost:5000/transactions')
     .then(results => {
       return results.json();
     })
@@ -65,20 +65,22 @@ class Content extends Component {
       <ContentDiv>
         <ContentArea>
           <CoopTable key='header'>
-            <HeaderField>Name</HeaderField>
-            <HeaderField>Co-Op</HeaderField>
-            <HeaderField>Phone</HeaderField>
-            <HeaderField>Role</HeaderField>
-            <HeaderField>Loan Balance</HeaderField>
+            <HeaderField>Member</HeaderField>
+            <HeaderField>Amount</HeaderField>
+            <HeaderField>Previous Balance</HeaderField>
+            <HeaderField>New Balance</HeaderField>
+            <HeaderField>Status</HeaderField>
+            <HeaderField>Timestamp</HeaderField>
           </CoopTable>
-            {this.state.data.map(({name, coop, phone, role, loan_balance}) => {
+            {this.state.data.map(({user_name, amount, previous_balance, new_balance, state, timestamp}) => {
               return (
-                <CoopTable key={name}>
-                  <CoopField>{name}</CoopField>
-                  <CoopField>{coop}</CoopField>
-                  <CoopField>{phone}</CoopField>
-                  <CoopField>{role}</CoopField>
-                  <CoopField>{loan_balance}</CoopField>
+                <CoopTable key={timestamp}>
+                  <CoopField>{user_name}</CoopField>
+                  <CoopField>{amount}</CoopField>
+                  <CoopField>{previous_balance}</CoopField>
+                  <CoopField>{new_balance}</CoopField>
+                  <CoopField>{state}</CoopField>
+                  <CoopField>{timestamp}</CoopField>
                 </CoopTable>
               )
             })}
@@ -88,4 +90,4 @@ class Content extends Component {
   }
 }
 
-export default Content;
+export default Transactions;
