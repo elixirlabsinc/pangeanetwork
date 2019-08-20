@@ -1,3 +1,4 @@
 env
 sample_db.sqlite
 web/node_modules
+.idea
