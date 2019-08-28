@@ -49,8 +49,9 @@ def get_members(from_user):
   if not valid:
     return "Error: you are not an officer"
   coop = CoOp.query.filter(CoOp.id == valid_user.co_op_id).first()
+  users = User.query.filter(User.co_op_id == coop.id)
   members = 'Members in your coop:\n'
-  for user in coop.users:
+  for user in users:
     members += user.first_name + ' ' + user.last_name + ': (id = ' + str(user.id) + ')\n'
   return members
 
@@ -263,6 +264,7 @@ def index():
       # TODO: remove transaction
     elif cmd == 'MEMBERS':
       list_of_members = get_members(from_user)
+      print(list_of_members)
       response = sms.send(list_of_members, [from_user])
       print(response)
     else:
@@ -400,7 +402,7 @@ Populate a small db with some example entries.
       last_name='User',
       email='admin',
       password='admin',
-      phone='254456923994',
+      phone='254798745678',
       role_id=super_user_role.id,
       co_op_id=co_op_1.id
     )
