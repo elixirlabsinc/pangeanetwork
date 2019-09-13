@@ -202,6 +202,7 @@ class User(db.Model):
 
 class Loan(db.Model):
   id = db.Column(db.Integer, primary_key=True)
+  initial_balance = db.Column(db.Integer)
   balance = db.Column(db.Integer)
   interest = db.Column(db.Integer)
   loan_start = db.Column(db.DateTime)
@@ -343,6 +344,24 @@ def coops():
 
   return Response(json.dumps(results), mimetype='application/json')
 
+@app.route('/loans', methods=['GET'])
+def loans():
+  loans = Loan.query.all()
+  data = []
+  for loan in loans:
+    user = User.query.filter(loan.user_id == User.id).first()
+    data.append(
+      {
+        'name': user.first_name + ' ' + user.last_name,
+        'start': loan.loan_start,
+        'end': loan.loan_end,
+        'interest': loan.interest,
+        'initial': loan.initial_balance,
+        'remaining': loan.balance
+      }
+    )
+  results = {'data': data}
+  return Response(json.dumps(results), mimetype='application/json')
 
 # Admin interface
 admin = admin.Admin(app, name='Pangea Network', template_mode='bootstrap3')
