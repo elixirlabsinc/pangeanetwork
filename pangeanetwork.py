@@ -1,22 +1,17 @@
+from app import create_app, db
 import os
 import os.path as op
 from datetime import datetime
 from flask import Flask
-from flask_cors import CORS
 from flask import request
 from flask_sqlalchemy import SQLAlchemy
 from flask import Response
+from app.models import User, CoOp, Role, Loan, Transaction 
 import africastalking
 import json
 
-import flask_admin as admin
-from flask_admin.contrib.sqla import ModelView
+app = create_app()
 
-app = Flask(__name__)
-# TODO(aashni): check if CORS setup is correct
-CORS(app)
-app.config.from_pyfile('config.py')
-db = SQLAlchemy(app)
 username = "sandbox"
 api_key = os.environ.get('AT_API_KEY')
 test_number = "+254456923994"
@@ -122,125 +117,9 @@ def confirm_transaction(from_user):
       print('Encountered an error while sending: %s' % str(e))
 
 
-# Models
-roles_users = db.Table(
-  'roles_users',
-  db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-  db.Column('role_id', db.Integer(), db.ForeignKey('role.id'))
-)
-
-co_ops_users = db.Table(
-  'co_ops_users',
-  db.Column('user_id', db.Integer(), db.ForeignKey('user.id')),
-  db.Column('co_op_id', db.Integer(), db.ForeignKey('co_op.id'))
-)
-
-loans_users = db.Table(
-  'loans_users',
-  db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-  db.Column('loan_id', db.Integer, db.ForeignKey('loan.id'))
-)
-
-transactions_loans = db.Table(
-  'transactions_loans',
-  db.Column('transaction_id', db.Integer, db.ForeignKey('transaction.id')),
-  db.Column('loan_id', db.Integer, db.ForeignKey('loan.id'))
-)
-
-transactions_users = db.Table(
-  'transactions_users',
-  db.Column('transaction_id', db.Integer, db.ForeignKey('transaction.id')),
-  db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-)
-
-
-class CoOp(db.Model):
-  id = db.Column(db.Integer(), primary_key=True)
-  name = db.Column(db.String(80), unique=True)
-  is_active = db.Column(db.Boolean())
-  start_date = db.Column(db.DateTime())
-  end_date = db.Column(db.DateTime())
-  location = db.Column(db.String(255))
-  interest = db.Column(db.Integer())
-  initial_balance = db.Column(db.Integer())
-  expected_repayment = db.Column(db.Integer())
-  current_balance = db.Column(db.Integer())
-  users = db.relationship('User', uselist=False, backref='co_op')
-
-  def __str__(self):
-    return self.name
-
-
-class Role(db.Model):
-  id = db.Column(db.Integer(), primary_key=True)
-  name = db.Column(db.String(80), unique=True)
-  description = db.Column(db.String(255))
-  users = db.relationship('User', uselist=False, backref='role')
-
-  def __str__(self):
-    return self.name
-
-
-class User(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  first_name = db.Column(db.String(255))
-  last_name = db.Column(db.String(255))
-  email = db.Column(db.String(255), unique=True)
-  phone = db.Column(db.String(255), unique=True)
-  password = db.Column(db.String(255))
-  active = db.Column(db.Boolean())
-  confirmed_at = db.Column(db.DateTime())
-  co_op_id = db.Column(db.Integer, db.ForeignKey('co_op.id'))
-  role_id = db.Column('Role', db.ForeignKey('role.id'))
-  loan = db.relationship('Loan', uselist=False, backref='user')
-  transactions = db.relationship('Transaction', secondary=transactions_users,
-                                 backref='users', lazy='dynamic')
-
-  def __str__(self):
-    return self.email
-
-
-class Loan(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  initial_balance = db.Column(db.Integer)
-  balance = db.Column(db.Integer)
-  interest = db.Column(db.Integer)
-  loan_start = db.Column(db.DateTime)
-  loan_end = db.Column(db.DateTime)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
-
-class Transaction(db.Model):
-  id = db.Column(db.Integer, primary_key=True)
-  amount = db.Column(db.Integer)
-  previous_balance = db.Column(db.Integer)
-  new_balance = db.Column(db.Integer)
-  state = db.Column(db.String(255))
-  timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-  user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-  loan = db.relationship('Loan', secondary=transactions_loans,
-                         backref=db.backref('transactions', lazy='dynamic'))
-
-
-# Customized admin interface
-class CustomView(ModelView):
-  list_template = 'list.html'
-  create_template = 'create.html'
-  edit_template = 'edit.html'
-
-
-class UserAdmin(CustomView):
-  column_searchable_list = ()
-  column_filters = ('first_name', 'email')
-  column_exclude_list = ['password', ]
-
-
-# Flask views
-@app.route('/', methods=['GET', 'POST'])
+# Routes
+@app.route('/', methods=['POST'])
 def index():
-  if request.method == 'GET':
-    return '<a href="/admin/">Click me to get to Admin!</a>'
-
   # text receive
   if request.method == 'POST':
     try:
@@ -341,8 +220,8 @@ def coops():
       }
     )
   results = {"data": data}
-
   return Response(json.dumps(results), mimetype='application/json')
+
 
 @app.route('/loans', methods=['GET'])
 def loans():
@@ -362,101 +241,3 @@ def loans():
     )
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
-
-# Admin interface
-admin = admin.Admin(app, name='Pangea Network', template_mode='bootstrap3')
-
-# Add views
-admin.add_view(CustomView(CoOp, db.session, name="Co Ops"))
-admin.add_view(CustomView(Role, db.session, name="Roles"))
-admin.add_view(CustomView(Transaction, db.session, name="Transactions"))
-admin.add_view(CustomView(Loan, db.session, name="Loans"))
-admin.add_view(UserAdmin(User, db.session, name="Users"))
-
-
-def build_sample_db():
-  """
-Populate a small db with some example entries.
-"""
-
-  import string
-  import random
-
-  db.drop_all()
-  db.create_all()
-
-  with app.app_context():
-    user_role = Role(name='member')
-    super_user_role = Role(name='officer')
-    db.session.add(user_role)
-    db.session.add(super_user_role)
-    db.session.commit()
-
-    co_op_1 = CoOp(
-      name='ABC',
-      is_active=True,
-      location='Seattle',
-      interest=5,
-      initial_balance=2000,
-      expected_repayment=2200,
-      current_balance=1500
-    )
-
-    co_op_2 = CoOp(
-      name='DEF',
-      is_active=True,
-      location='New York',
-      interest=5,
-      initial_balance=4000,
-      expected_repayment=4400,
-      current_balance=35000
-    )
-
-    db.session.add(co_op_1)
-    db.session.add(co_op_2)
-    db.session.commit()
-
-    admin_user = User(
-      first_name='Admin',
-      last_name='User',
-      email='admin',
-      password='admin',
-      phone='254798745678',
-      role_id=super_user_role.id,
-      co_op_id=co_op_1.id
-    )
-    test_user = User(
-      first_name='Test',
-      last_name='User',
-      email='test@user.com',
-      password='12345',
-      phone='254987654321',
-      role_id=user_role.id,
-      co_op_id=co_op_1.id
-    )
-    db.session.add(admin_user)
-    db.session.add(test_user)
-    db.session.commit()
-
-    test_user_loan = Loan(
-      user=test_user,
-      balance=2000,
-      interest=2,
-    )
-    db.session.add(test_user_loan)
-    db.session.commit()
-
-  return
-
-
-if __name__ == '__main__':
-
-  # Build a sample db on the fly, if one does not exist yet.
-  app_dir = os.path.realpath(os.path.dirname(__file__))
-  database_path = os.path.join(app_dir, app.config['DATABASE_FILE'])
-  if not os.path.exists(database_path):
-    build_sample_db()
-  test_text()
-
-  # Start app
-  app.run(debug=True)
