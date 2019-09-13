@@ -1,27 +1,28 @@
-FLASK_ADMIN_SWATCH = 'flatly'
+class Config(object):
+  FLASK_ADMIN_SWATCH = 'flatly'
 
-SECRET_KEY = '123456790'
+  SECRET_KEY = '123456790'
 
-# database config
-DATABASE_FILE = 'sample_db.sqlite'
-SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
-SQLALCHEMY_ECHO = True
+  # database config
+  DATABASE_FILE = 'sample_db.sqlite'
+  SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
+  SQLALCHEMY_ECHO = True
 
-# Flask-Security config
-SECURITY_URL_PREFIX = "/admin"
-SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
-SECURITY_PASSWORD_SALT = "ATGUOHAELKiubahiughaerGOJAEGj"
+  # Flask-Security config
+  SECURITY_URL_PREFIX = "/admin"
+  SECURITY_PASSWORD_HASH = "pbkdf2_sha512"
+  SECURITY_PASSWORD_SALT = "ATGUOHAELKiubahiughaerGOJAEGj"
 
-# Flask-Security URLs
-SECURITY_LOGIN_URL = "/login/"
-SECURITY_LOGOUT_URL = "/logout/"
-SECURITY_REGISTER_URL = "/register/"
+  # Flask-Security URLs
+  SECURITY_LOGIN_URL = "/login/"
+  SECURITY_LOGOUT_URL = "/logout/"
+  SECURITY_REGISTER_URL = "/register/"
 
-SECURITY_POST_LOGIN_VIEW = "/admin/"
-SECURITY_POST_LOGOUT_VIEW = "/admin/"
-SECURITY_POST_REGISTER_VIEW = "/admin/"
+  SECURITY_POST_LOGIN_VIEW = "/admin/"
+  SECURITY_POST_LOGOUT_VIEW = "/admin/"
+  SECURITY_POST_REGISTER_VIEW = "/admin/"
 
-# Flask-Security features
-SECURITY_REGISTERABLE = True
-SECURITY_SEND_REGISTER_EMAIL = False
-SQLALCHEMY_TRACK_MODIFICATIONS = False
+  # Flask-Security features
+  SECURITY_REGISTERABLE = True
+  SECURITY_SEND_REGISTER_EMAIL = False
+  SQLALCHEMY_TRACK_MODIFICATIONS = False
