@@ -5,18 +5,22 @@ import Content from './components/content';
 import Transactions from './components/transactions';
 import styled from 'styled-components';
 import './styles/main.css';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const PangeaNetworkDiv = styled.div`
 `;
 
 function App() {
-  const action = window.location.pathname;
-  const content = action === '/members' ? <Content /> : <Transactions />
   return (
     <PangeaNetworkDiv>
       <Header />
-      {content}
-    </PangeaNetworkDiv>
+      <Router>
+        <Route path="/coops/" component={Coops} />
+        <Route path="/members/" component={Members} />
+        <Route path="/transactions/" component={Transactions} />
+        <Route path="/loans/" component={Loans} />
+      </Router>
+    </PangeaNetworkDiv> 
   );
 }
 

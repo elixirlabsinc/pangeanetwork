@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const NavigationList = styled.ul`
   background-color: #262164;
@@ -42,7 +41,6 @@ class Navigation extends Component {
  
   render() {
     return (
-      <Router>
       <NavigationList>
         <NavigationListItem>
             <NavigationLink href="/">
@@ -50,35 +48,18 @@ class Navigation extends Component {
             </NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/coops">
-                <Link to="/coops/">Co-Ops</Link>
-            </NavigationLink>
+            <NavigationLink href="/coops"></NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/members">
-                <Link to="/members/">Members</Link>
-            </NavigationLink>
+            <NavigationLink href="/members"></NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/transactions">
-                <Link to="/transactions/">Transactions</Link>
-            </NavigationLink>
+            <NavigationLink href="/transactions"></NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/loans">
-                <Link to="/loans/">Loans</Link>
-            </NavigationLink>
+            <NavigationLink href="/loans"></NavigationLink>
           </NavigationListItem>
       </NavigationList>
-
-      <Route path="/" exact component={this.Index} />
-      <Route path="/coops/" component={this.Coops} />
-      <Route path="/members/" component={this.Members} />
-      <Route path="/transactions/" component={this.Transactions} />
-      <Route path="/loans/" component={this.Loans} />
-
-      
-      </Router>
     );
   }
 
