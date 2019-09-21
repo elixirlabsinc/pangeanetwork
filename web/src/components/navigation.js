@@ -43,21 +43,19 @@ class Navigation extends Component {
     return (
       <NavigationList>
         <NavigationListItem>
-            <NavigationLink href="/">
-                <Link to="/">Dashboards</Link>
-            </NavigationLink>
+            <NavigationLink href="/">Dashboards</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/coops"></NavigationLink>
+            <NavigationLink href="/coops">Co-Ops</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/members"></NavigationLink>
+            <NavigationLink href="/members">Members</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/transactions"></NavigationLink>
+            <NavigationLink href="/transactions">Transactions</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/loans"></NavigationLink>
+            <NavigationLink href="/loans">Loans</NavigationLink>
           </NavigationListItem>
       </NavigationList>
     );
