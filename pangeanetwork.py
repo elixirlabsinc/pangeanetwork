@@ -52,15 +52,19 @@ def get_members(from_user):
 
 
 def add_transaction(from_user, msg):
-  leader_phone = int(from_user)
-  print(leader_phone)
-  leader = User.query.filter(User.phone == leader_phone).first()
-  # TODO: check to make sure user exists, is leader
-  member_phone = msg[1]
-  member = User.query.filter(User.phone == member_phone).first()
+  africastalking.initialize(username, api_key)
+  sms = africastalking.SMS
+  from_phone = int(from_user)
+  print(from_phone)
+  member_id = msg[1]
+  member = User.query.filter(User.id == member_id).first()
   if member == None:
-    return send_error(leader_phone)
+    return send_missing_user_error(from_phone)
   amount = int(msg[2])
+  if member.loan == None:
+    officer_text = sms.send('ERROR: Given member does not have a current loan', [from_phone])
+    print(officer_text)
+    return 'Error: Member does not have a current loan'
   loan_balance = member.loan.balance
   new_user_transaction = Transaction(
     loan=[member.loan],
@@ -74,53 +78,69 @@ def add_transaction(from_user, msg):
   db.session.add(member)
   db.session.add(new_user_transaction)
   db.session.commit()
-  africastalking.initialize(username, api_key)
-  sms = africastalking.SMS
+  officer_role = Role.query.filter(Role.name == "officer").first()
+  co_op_officer = User.query.filter(User.role_id == officer_role.id, User.co_op_id == member.co_op_id).first()
+  
   try:
-    leader_text = sms.send("Transaction added. Requesting confirmation from " + str(member_phone),
-                           ['+' + str(leader_phone)])
-    member_text = sms.send("Your Co-Op Leader has added a " + str(amount) + " repayment transaction for your loan. \
-    Please respond with 'Y' to confirm this transaction is accurate or 'N' to reject it. Your new balance will be: " + str(
-      loan_balance - amount), ['+' + str(member_phone)])
+    response_text = sms.send("Transaction added. Requesting confirmation from Co-Op Leader", ['+' + str(from_phone)])
+    leader_text = sms.send("A new repayment transaction has been added for member " + str(member.first_name) + " (ID: " + str(member.id) + ") in the amount of " + str(amount) + ". \
+    Please respond with 'Y " + str(member.id) + "' to confirm this transaction is accurate or 'N " + str(member.id) + "' to reject it. Their new balance will be: " + 
+    str(loan_balance - amount), ['+' + co_op_officer.phone])
+    print(response_text)
     print(leader_text)
-    print(member_text)
     return 'success: added loan transaction'
   except Exception as e:
     print('Encountered an error while sending: %s' % str(e))
     return 'Encountered an error while sending: %s' % str(e)
 
 
-def send_error(sender_phone):
+def send_missing_user_error(sender_phone):
   error_text = sms.send(
-    "The user you are trying to update does not exist in our database. Please text <ADD {user number}> if you would like to add them",
-    ['+' + str(sender_phone)])
+    "The user you are trying to update does not exist in our database. Please text <ADD {user number}> if you would like to add them", ['+' + str(sender_phone)])
   print(error_text)
   return 'error: user does not exist'
 
 
-def confirm_transaction(from_user):
-  member = User.query.filter(User.phone == int(from_user)).first()
+def confirm_transaction(from_user, msg):
+  officer = User.query.filter(User.phone == int(from_user)).first()
   # TODO: return error message if user does not exist
+  # TODO: return error message if user is not an officer
+  member_id = msg[1]
+  co_op = CoOp.query.filter(CoOp.id == officer.co_op_id).first()
+  member = User.query.filter(User.co_op_id == co_op.id, User.id == member_id).first()
+  if member == None:
+    return send_missing_user_error(from_user)
   user_transaction = member.transactions.all()[-1]
-  # TODO: return notice message if transaction has already been confirmed
-  if user_transaction.state == 'initiated':
+  if user_transaction == None:
+    error_text = sms.send('ERROR: There is no transaction available to confirm for user ' + str(member.first_name))
+    print(error_text)
+    return 'error: transaction does not exist'
+  elif user_transaction.state == 'initiated':
     user_transaction.state = 'confirmed'
     member.loan.balance = user_transaction.new_balance
-
+    co_op.current_balance -= user_transaction.amount
     db.session.add(member)
+    db.session.add(co_op)
     db.session.add(user_transaction)
     db.session.commit()
     try:
-      member_text = sms.send("Transaction complete. New loan balance is " + str(member.loan.balance), [from_user])
-      print(member_text)
+      officer_text = sms.send("Transaction complete. New balance for member " + str(member.id) + ' - ' + str(member.first_name) + " is " + str(member.loan.balance) + '. \
+        New balance for Co-Op ' + co_op.name + ' is ' + str(co_op.current_balance), [from_user])
+      if member.phone:
+        member_text = sms.send('Transaction confirmed. Your new balance is ' + str(member.loan.balance), [member.phone])
+        print(member_text)
+      print(officer_text)
     except Exception as e:
       print('Encountered an error while sending: %s' % str(e))
 
 
 # Routes
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
+  if request.method == 'GET':
+    return 'success'
   # text receive
+  print(request.method)
   if request.method == 'POST':
     try:
       from_user = request.form.getlist('from')[0]
@@ -130,19 +150,19 @@ def index():
     if from_user == None:
       return 'failure: request error'
     msg = request.form.getlist('text')[0].split()
-    cmd = msg[0]
+    cmd = msg[0].lower()
     print(msg)
     print(cmd)
-    if cmd.lower() == 'loan':
+    if cmd == 'loan':
       if len(msg) != 3:
         return 'error'
       return add_transaction(from_user, msg)
-    elif cmd.lower() == 'y':
-      confirm_transaction(from_user)
-    elif cmd.lower() == 'n':
+    elif cmd == 'y':
+      confirm_transaction(from_user, msg)
+    elif cmd == 'n':
       return 'transaction denied'
       # TODO: remove transaction
-    elif cmd == 'MEMBERS':
+    elif cmd == 'members':
       list_of_members = get_members(from_user)
       print(list_of_members)
       response = sms.send(list_of_members, [from_user])
@@ -152,7 +172,7 @@ def index():
       # TODO: handle error
     # ImmutableMultiDict([
     #   ('linkId', '04c0d31e-e16a-42b9-aa3b-2157c79e4c82'),
-    #   ('text', '254987654321 LOAN 500'),
+    #   ('text', 'LOAN 123456789 500'),
     #   ('to', '7635'),
     #   ('id', '86b65912-d4ac-44f3-b912-c7a046134836'),
     #   ('date', '2019-02-03 09:52:15'),
@@ -241,3 +261,6 @@ def loans():
     )
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
+
+if __name__ == '__main__':
+  app.run()
