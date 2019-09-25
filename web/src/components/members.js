@@ -42,7 +42,7 @@ const HeaderField = styled.div`
   color: #262164;
 `;
 
-class Content extends Component {
+class Members extends Component {
   constructor() {
     super();
     this.state = {
@@ -88,4 +88,4 @@ class Content extends Component {
   }
 }
 
-export default Content;
+export default Members;

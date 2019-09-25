@@ -1,11 +1,12 @@
 import React from 'react';
-import logo from './logo.svg';
 import Header from './components/header';
-import Content from './components/content';
+import Coops from './components/coops';
+import Members from './components/members';
 import Transactions from './components/transactions';
+import Loans from './components/loans';
 import styled from 'styled-components';
 import './styles/main.css';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 const PangeaNetworkDiv = styled.div`
 `;
