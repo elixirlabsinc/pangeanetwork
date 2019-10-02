@@ -133,23 +133,44 @@ def confirm_transaction(from_user, msg):
     except Exception as e:
       print('Encountered an error while sending: %s' % str(e))
 
+def create_new_user(user_data):
+  new_user = User(
+    first_name=user_data['first_name'],
+    last_name=user_data['last_name'],
+    email=user_data['email'],
+    phone=user_data['phone'],
+    active=True,
+    co_op_id=user_data['co_op_id'],
+    role_id=user_data['role_id']
+  )
+  db.session.add(new_user)
+  db.session.commit()
+  return new_user.id
+
 
 # Routes
 @app.route('/', methods=['GET', 'POST'])
 def index():
   if request.method == 'GET':
     return 'success'
-  # text receive
-  print(request.method)
-  if request.method == 'POST':
+  
+  if request.method == 'POST': # text receive
+    data = request.form.to_dict()
+    # expected data format: 
+    # {'linkId': 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx', 
+    # 'text': 'loan 2 34', 
+    # 'to': '<short code>', 
+    # 'id': 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx', 
+    # 'date': '2019-10-02 15:12:34', 
+    # 'from': '+11234567890}
     try:
-      from_user = request.form.getlist('from')[0]
+      from_user = data['from']
       print(from_user)
     except:
       from_user = None
     if from_user == None:
       return 'failure: request error'
-    msg = request.form.getlist('text')[0].split()
+    msg = data['text'].split()
     cmd = msg[0].lower()
     print(msg)
     print(cmd)
@@ -167,18 +188,10 @@ def index():
       print(list_of_members)
       response = sms.send(list_of_members, [from_user])
       print(response)
+    # TODO: support 'new' command for new members and funds
     else:
       return 'error'
       # TODO: handle error
-    # ImmutableMultiDict([
-    #   ('linkId', '04c0d31e-e16a-42b9-aa3b-2157c79e4c82'),
-    #   ('text', 'LOAN 123456789 500'),
-    #   ('to', '7635'),
-    #   ('id', '86b65912-d4ac-44f3-b912-c7a046134836'),
-    #   ('date', '2019-02-03 09:52:15'),
-    #   ('from', '+254123456789')
-    #   ])
-    print(request.form)
     return 'success'
 
 
@@ -203,23 +216,32 @@ def transactions():
   return Response(json.dumps(results, default=str), mimetype='application/json')
 
 
-@app.route('/members', methods=['GET'])
+@app.route('/members', methods=['GET', 'POST'])
 def members():
-  data = []
-  users = User.query.all()
-  for user in users:
-    data.append(
-      {
-        "name": user.first_name + ' ' + user.last_name,
-        "coop": CoOp.query.filter(CoOp.id == user.co_op_id).first().name,
-        "phone": user.phone,
-        "role": Role.query.filter(Role.id == user.role_id).first().name,
-        "loan_balance": user.loan.balance if user.loan else 'N/A'
-      }
-    )
-  results = {"data": data}
+  if request.method == 'GET':
+    data = []
+    users = User.query.all()
+    for user in users:
+      data.append(
+        {
+          "name": user.first_name + ' ' + user.last_name,
+          "coop": CoOp.query.filter(CoOp.id == user.co_op_id).first().name,
+          "phone": user.phone,
+          "role": Role.query.filter(Role.id == user.role_id).first().name,
+          "loan_balance": user.loan.balance if user.loan else 'N/A'
+        }
+      )
+    results = {"data": data}
 
-  return Response(json.dumps(results, default=str), mimetype='application/json')
+    return Response(json.dumps(results, default=str), mimetype='application/json')
+
+  elif request.method == 'POST':
+    data = request.form.to_dict()
+    id = create_new_user(data)
+    result = { 'status': 200, 'user_id': id }
+    # TODO: prompt loan creation if loan_id was not given
+    # TODO: request email confirmation if email was given
+    return Response(json.dumps(result, default=str), mimetype='application/json')
 
 
 @app.route('/coops', methods=['GET'])
