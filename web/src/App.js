@@ -5,6 +5,7 @@ import Content from './components/content';
 import Transactions from './components/transactions';
 import styled from 'styled-components';
 import './styles/main.css';
+import RevolvingFund from './components/revolving_funds';
 
 const PangeaNetworkDiv = styled.div`
 `;
