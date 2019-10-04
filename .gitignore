@@ -2,3 +2,6 @@ env
 sample_db.sqlite
 web/node_modules
 .idea
+app/__pycache__
+.vscode/
+__pycache__/

@@ -91,6 +91,7 @@ def build_sample_db(app):
 
     test_user_loan = Loan(
       user=test_user,
+      initial_balance=2000,
       balance=2000,
       interest=2,
     )

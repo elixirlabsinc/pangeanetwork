@@ -38,27 +38,30 @@ const NavigationLink = styled.a`
 
 
 class Navigation extends Component {
+ 
   render() {
     return (
       <NavigationList>
         <NavigationListItem>
-          <NavigationLink href="/">Dashboards</NavigationLink>
+            <NavigationLink href="/">Dashboards</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/coops">Co-Ops</NavigationLink>
+            <NavigationLink href="/coops">Co-Ops</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/members">Members</NavigationLink>
+            <NavigationLink href="/members">Members</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/transactions">Transactions</NavigationLink>
+            <NavigationLink href="/transactions">Transactions</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-          <NavigationLink href="/loans">Loans</NavigationLink>
+            <NavigationLink href="/loans">Loans</NavigationLink>
           </NavigationListItem>
       </NavigationList>
     );
   }
+
+
 }
 
 export default Navigation;
