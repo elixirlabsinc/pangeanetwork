@@ -7,6 +7,8 @@ import Loans from './components/loans';
 import styled from 'styled-components';
 import './styles/main.css';
 import { BrowserRouter as Router, Route } from "react-router-dom";
+import RevolvingFund from './components/revolving_funds';
+
 
 const PangeaNetworkDiv = styled.div`
 `;
