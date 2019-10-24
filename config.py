@@ -2,6 +2,7 @@ class Config(object):
   FLASK_ADMIN_SWATCH = 'flatly'
 
   SECRET_KEY = '123456790'
+  JWT_SECRET_KEY = 'abcdefg'
 
   # database config
   DATABASE_FILE = 'sample_db.sqlite'
