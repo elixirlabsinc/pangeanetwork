@@ -1,6 +1,7 @@
 from flask import Flask, request, current_app
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
+from passlib.hash import pbkdf2_sha256 as sha256
 import os
 from config import Config
 
@@ -71,7 +72,7 @@ def build_sample_db(app):
       first_name='Admin',
       last_name='User',
       email='admin',
-      password='admin',
+      password=sha256.hash('admin'),
       phone='254798745678',
       role_id=super_user_role.id,
       co_op_id=co_op_1.id
@@ -80,7 +81,7 @@ def build_sample_db(app):
       first_name='Test',
       last_name='User',
       email='test@user.com',
-      password='12345',
+      password=sha256.hash('12345'),
       phone='254987654321',
       role_id=user_role.id,
       co_op_id=co_op_1.id

@@ -2,15 +2,19 @@ from app import create_app, db
 import os
 import os.path as op
 from datetime import datetime
-from flask import Flask
-from flask import request
+from flask import Flask, request, Response
 from flask_sqlalchemy import SQLAlchemy
-from flask import Response
-from app.models import User, CoOp, Role, Loan, Transaction 
+from flask_jwt_extended import (
+    JWTManager, jwt_required, create_access_token,
+    get_jwt_identity
+)
+from passlib.hash import pbkdf2_sha256 as sha256
+from app.models import User, CoOp, Role, Loan, Transaction
 import africastalking
 import json
 
 app = create_app()
+jwt = JWTManager(app)
 
 username = "sandbox"
 api_key = os.environ.get('AT_API_KEY')
@@ -196,6 +200,7 @@ def index():
 
 
 @app.route('/transactions', methods=['GET'])
+@jwt_required
 def transactions():
   data = []
   transactions = Transaction.query.order_by(Transaction.timestamp.desc()).all()
@@ -217,6 +222,7 @@ def transactions():
 
 
 @app.route('/members', methods=['GET', 'POST'])
+@jwt_required
 def members():
   if request.method == 'GET':
     data = []
@@ -245,6 +251,7 @@ def members():
 
 
 @app.route('/coops', methods=['GET'])
+@jwt_required
 def coops():
   data = []
   coops = CoOp.query.all()
@@ -266,6 +273,7 @@ def coops():
 
 
 @app.route('/loans', methods=['GET'])
+@jwt_required
 def loans():
   loans = Loan.query.all()
   data = []
@@ -283,6 +291,46 @@ def loans():
     )
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
+
+
+@app.route('/register', methods=['POST'])
+def register():
+  email = request.form['email']
+  test = User.query.filter_by(email=email).first()
+  if test:
+    return Response(json.dumps({'message': 'That email already exists.'}), mimetype='application/json'), 409
+  else:
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    last_name = request.form['last_name']
+    password = request.form['password']
+    role_id = request.form['role_id']
+    co_op_id = request.form['co_op_id']
+    phone = request.form['phone']
+    user = User(first_name=first_name, last_name=last_name, email=email, password=sha256.hash(password), role_id=role_id, co_op_id=co_op_id, phone=phone)
+    db.session.add(user)
+    db.session.commit()
+    return Response(json.dumps({ 'message': 'Admin created successfully.' }), mimetype='application/json'), 201
+
+
+@app.route('/login', methods=['POST'])
+def login():
+  if request.is_json:
+    email = request.json['email']
+    password = request.json['password']
+  else:
+    email = request.form['email']
+    password = request.form['password']
+  test = User.query.filter_by(email=email).first()
+  if test:
+    if sha256.verify(password, test.password):
+      access_token = create_access_token(identity=email)
+      return Response(json.dumps({ 'message': 'Login succeeded', 'access_token': access_token }), mimetype='application/json')
+    else:
+      return Response(json.dumps({ 'message': 'Invalid email/password.' }), mimetype='application/json'), 401
+  else:
+    return Response(json.dumps({ 'message': 'That email does not exist.' }), mimetype='application/json'), 401
+
 
 if __name__ == '__main__':
   app.run()

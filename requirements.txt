@@ -3,3 +3,5 @@ Flask-Admin
 Flask-SQLAlchemy
 Flask-CORS
 africastalking
+flask-jwt-extended
+passlib
