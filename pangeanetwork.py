@@ -9,6 +9,12 @@ from flask import Response
 from app.models import User, CoOp, Role, Loan, Transaction 
 import africastalking
 import json
+from flask import Flask
+from flaskext.mail import Mail
+from flaskext.mail import Message
+import random
+import string
+
 
 app = create_app()
 
@@ -18,6 +24,8 @@ test_number = "+254456923994"
 africastalking.initialize(username, api_key)
 sms = africastalking.SMS
 
+# initialize mail app
+mail = Mail()
 
 def test_text():
   africastalking.initialize(username, api_key)
@@ -284,5 +292,18 @@ def loans():
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
 
+@app.route('/passwordreset', methods=['POST'])
+def passwordReset():
+  body = request.json
+  print(body['email'])
+  temp_password=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
+  subjectMsg = "Pangea Network: Temporary Password Token"
+  msg = Message(subjectMsg, sender="csetestemail300@gmail.com",recipients=[str(body['email'])])
+  msg.body = "This is your temporary password " + temp_password
+  mail.send(msg)
+  return Response(json.dumps({'status':'ok'}),mimetype='application/json')
+
+
 if __name__ == '__main__':
-  app.run()
+  app.run(debug=True)
+  mail.init_app(app)
