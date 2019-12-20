@@ -95,14 +95,22 @@ def add_transaction(from_user, msg):
 
 
 def send_missing_user_error(sender_phone):
-  error_text = sms.send(
+    error_text = sms.send(
     "The user you are trying to update does not exist in our database. Please text <ADD {user number}> if you would like to add them", ['+' + str(sender_phone)])
-  print(error_text)
-  return 'error: user does not exist'
+    print(error_text)
+    return 'error: user does not exist'
 
+def send_not_officer_error(sender_phone):
+    error_text = sms.send(
+            "The user, {user number}, you have specified does not have the required role of officer in order to complete the transaction.", ['+' + str(sender_phone)]) 
+    print(error_text) 
+    return 'error: user not an officer'
 
 def confirm_transaction(from_user, msg):
-  officer = User.query.filter(User.phone == int(from_user)).first()
+  officer_role = Role.query.filter(Role.name == 'officer').first()
+  officer = User.query.filter(User.phone == int(from_user), User.role_id == officer_role.id).first() 
+  if officer is None: 
+      return send_not_officer_error(from_user) 
   # TODO: return error message if user does not exist
   # TODO: return error message if user is not an officer
   member_id = msg[1]
