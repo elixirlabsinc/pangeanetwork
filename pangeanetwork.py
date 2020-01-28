@@ -302,14 +302,33 @@ def loans():
 
 @app.route('/passwordreset', methods=['POST'])
 def passwordReset():
+  '''
+  Fill in sender email fields
+  '''
   body = request.json
-  print(body['email'])
-  temp_password=''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(10))
-  subjectMsg = "Pangea Network: Temporary Password Token"
-  msg = Message(subjectMsg, sender="csetestemail300@gmail.com",recipients=[str(body['email'])])
-  msg.body = "This is your temporary password " + temp_password
-  mail.send(msg)
-  return Response(json.dumps({'status':'ok'}),mimetype='application/json')
+  encoded_jwt = jwt.encode({'payload': body['email']}, 'elixir', algorithm='HS256')
+  port = 587 
+  smtp_server = "smtp.gmail.com"
+  msg = MIMEMultipart("alternative")
+  msg['Subject'] = "Pangea Network Password Reset"
+  msg['From'] = ''
+  msg['To'] = body['email']
+  html = """\
+  Hello this is your password reset token<br/>
+  """
+  html += str(encoded_jwt)
+  msg.attach(MIMEText(html, 'html'))
+  context = ssl.create_default_context()
+
+  server = smtplib.SMTP(smtp_server, port)
+  server.ehlo() 
+  server.starttls(context=context)
+  # server.ehlo()
+  server.login(msg['From'],'')
+  server.sendmail(msg['From'],msg['To'],msg.as_string())
+  server.close()
+
+  return Response(json.dumps({'status':'ok', 'email': body['email']}),mimetype='application/json')
 
 
 if __name__ == '__main__':
