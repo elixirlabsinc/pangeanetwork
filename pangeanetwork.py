@@ -9,6 +9,12 @@ from flask import Response
 from app.models import User, CoOp, Role, Loan, Transaction 
 import africastalking
 import json
+from flask import Flask
+from flaskext.mail import Mail
+from flaskext.mail import Message
+import random
+import string
+
 
 app = create_app()
 
@@ -18,6 +24,8 @@ test_number = "+254456923994"
 africastalking.initialize(username, api_key)
 sms = africastalking.SMS
 
+# initialize mail app
+mail = Mail()
 
 def test_text():
   africastalking.initialize(username, api_key)
@@ -291,6 +299,37 @@ def loans():
     )
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
+
+@app.route('/passwordreset', methods=['POST'])
+def passwordReset():
+  '''
+  Fill in sender email fields
+  '''
+  body = request.json
+  encoded_jwt = jwt.encode({'payload': body['email']}, 'elixir', algorithm='HS256')
+  port = 587 
+  smtp_server = "smtp.gmail.com"
+  msg = MIMEMultipart("alternative")
+  msg['Subject'] = "Pangea Network Password Reset"
+  msg['From'] = ''
+  msg['To'] = body['email']
+  html = """\
+  Hello this is your password reset token<br/>
+  """
+  html += str(encoded_jwt)
+  msg.attach(MIMEText(html, 'html'))
+  context = ssl.create_default_context()
+
+  server = smtplib.SMTP(smtp_server, port)
+  server.ehlo() 
+  server.starttls(context=context)
+  # server.ehlo()
+  server.login(msg['From'],'')
+  server.sendmail(msg['From'],msg['To'],msg.as_string())
+  server.close()
+
+  return Response(json.dumps({'status':'ok', 'email': body['email']}),mimetype='application/json')
+
 
 if __name__ == '__main__':
   app.run()
