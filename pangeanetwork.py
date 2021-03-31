@@ -18,11 +18,11 @@ import string
 
 app = create_app()
 
-#username = "sandbox"
-#api_key = os.environ.get('AT_API_KEY')
-#test_number = "+254456923994"
-#africastalking.initialize(username, api_key)
-#sms = africastalking.SMS
+username = "sandbox"
+api_key = os.environ.get('AT_API_KEY')
+test_number = "+254456923994"
+africastalking.initialize(username, api_key)
+sms = africastalking.SMS
 
 # initialize mail app
 mail = Mail()
@@ -332,43 +332,42 @@ def forgotPassword():
 
 @app.route('/passwordreset', methods=['POST'])
 def passwordReset():
-    '''
-    Updates user's password based on json data sent from the client
+  '''
+  Updates user's password based on json data sent from the client
 
-      Json data:
-        email (str): the email of the user
-        password (str): the password of the user
-    '''
-    content = request.json
+    Json data:
+      email (str): the email of the user
+      password (str): the password of the user
+  '''
+  content = request.json
 
-    data = []
-    users = User.query.all()
+  data = []
+  users = User.query.all()
 
-    for user in users:
-      if(user.email == content['email']):
-        user.password = content['password']
+  for user in users:
+    if(user.email == content['email']):
+      user.password = content['password']
 
-    db.session.commit()
+  db.session.commit()
 
-    # query users again and return updated user object
+  # query users again and return updated user object
 
-    users = User.query.all()
+  users = User.query.all()
 
-    for user in users:
-      if(user.email == content['email']):
-        data.append(
-          {
-            "name": user.first_name + ' ' + user.last_name,
-            "phone": user.phone,
-            "email": user.email,
-            "password": user.password
-          }
-        )
+  for user in users:
+    if(user.email == content['email']):
+      data.append(
+        {
+          "name": user.first_name + ' ' + user.last_name,
+          "phone": user.phone,
+          "email": user.email,
+          "password": user.password
+        }
+      )
 
-    results = {"data": data}
+  results = {"data": data}
 
-    return Response(json.dumps(results, default=str), mimetype='application/json')
-
+  return Response(json.dumps(results, default=str), mimetype='application/json')
    
 
 if __name__ == '__main__':
