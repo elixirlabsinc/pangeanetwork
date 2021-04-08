@@ -23,11 +23,11 @@ app = create_app()
 
 bcrypt = Bcrypt(app)
 
-#username = "sandbox"
-#api_key = os.environ.get('AT_API_KEY')
-#test_number = "+254456923994"
-#africastalking.initialize(username, api_key)
-#sms = africastalking.SMS
+username = "sandbox"
+api_key = os.environ.get('AT_API_KEY')
+test_number = "+254456923994"
+africastalking.initialize(username, api_key)
+sms = africastalking.SMS
 
 # initialize mail app
 mail = Mail()
@@ -361,22 +361,7 @@ def passwordReset():
 
   db.session.commit()
 
-  # query users again and return updated user object
-
-  users = User.query.all()
-
-  for user in users:
-    if(user.email == content['email']):
-      data.append(
-        {
-          "name": user.first_name + ' ' + user.last_name,
-          "phone": user.phone,
-          "email": user.email,
-          "password": user.password
-        }
-      )
-
-  results = {"data": data}
+  results = {"code": 200, "status": "ok"}
 
   return Response(json.dumps(results, default=str), mimetype='application/json')
    
