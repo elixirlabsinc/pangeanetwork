@@ -12,17 +12,22 @@ import json
 from flask import Flask
 from flask_mail import Mail
 from flask_mail import Message
+from flask_bcrypt import Bcrypt
 import random
 import string
 
 
 app = create_app()
 
-username = "sandbox"
-api_key = os.environ.get('AT_API_KEY')
-test_number = "+254456923994"
-africastalking.initialize(username, api_key)
-sms = africastalking.SMS
+# intialize flask password hashing library
+
+bcrypt = Bcrypt(app)
+
+#username = "sandbox"
+#api_key = os.environ.get('AT_API_KEY')
+#test_number = "+254456923994"
+#africastalking.initialize(username, api_key)
+#sms = africastalking.SMS
 
 # initialize mail app
 mail = Mail()
@@ -150,12 +155,16 @@ def confirm_transaction(from_user, msg):
       print('Encountered an error while sending: %s' % str(e))
 
 def create_new_user(user_data):
+  # create password hash
+  pw_hash = bcrypt.generate_password_hash(user_data['password'])
+
   new_user = User(
     first_name=user_data['first_name'],
     last_name=user_data['last_name'],
     email=user_data['email'],
     phone=user_data['phone'],
     active=True,
+    password=pw_hash,
     co_op_id=user_data['co_op_id'],
     role_id=user_data['role_id']
   )
@@ -346,7 +355,9 @@ def passwordReset():
 
   for user in users:
     if(user.email == content['email']):
-      user.password = content['password']
+      # hash password
+      pw_hash = bcrypt.generate_password_hash(content['password'])
+      user.password = pw_hash
 
   db.session.commit()
 
