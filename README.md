@@ -22,7 +22,7 @@ Pangea Network Admin Dashboard
 
 4. Run the application:
 
-    `python3 app.py`
+    `python3 pangeanetwork.py`
 
     The backend will run at `localhost:5000`. The first time you run this example, a sample sqlite database gets populated automatically. To suppress this behaviour, comment the following lines in app.py:
 

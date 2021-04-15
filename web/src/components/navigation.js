@@ -10,6 +10,7 @@ const NavigationList = styled.ul`
   margin: 0px auto;
   padding: 0px;
   justify-content: center;
+  width: 1240px;
 `;
 
 const NavigationListItem = styled.li`
@@ -33,6 +34,8 @@ const NavigationLink = styled.a`
   padding: 0px 20px 4px 20px;
   &:active, &:hover {
     border-bottom: 4px solid #CEA02B;
+    color: #ffffff;
+    text-decoration: none;
   }
 `;
 

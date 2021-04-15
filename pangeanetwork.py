@@ -14,7 +14,7 @@ app = create_app()
 
 username = "sandbox"
 api_key = os.environ.get('AT_API_KEY')
-test_number = "+254456923994"
+test_number = "+254456534983"
 africastalking.initialize(username, api_key)
 sms = africastalking.SMS
 
@@ -36,7 +36,7 @@ def test_text():
 def get_members(from_user):
   user_phone = int(from_user)
   print('User phone: ' + str(user_phone))
-  officer_role = Role.query.filter(Role.name == "officer").first()
+  officer_role = Role.query.filter(Role.name == "Officer").first()
   valid_user = User.query.filter(User.role_id == officer_role.id, User.phone == user_phone).first()
   valid = False
   if valid_user is not None:
@@ -78,7 +78,7 @@ def add_transaction(from_user, msg):
   db.session.add(member)
   db.session.add(new_user_transaction)
   db.session.commit()
-  officer_role = Role.query.filter(Role.name == "officer").first()
+  officer_role = Role.query.filter(Role.name == "Officer").first()
   co_op_officer = User.query.filter(User.role_id == officer_role.id, User.co_op_id == member.co_op_id).first()
   
   try:
@@ -134,6 +134,7 @@ def confirm_transaction(from_user, msg):
       print('Encountered an error while sending: %s' % str(e))
 
 def create_new_user(user_data):
+  print(user_data['first_name'])
   new_user = User(
     first_name=user_data['first_name'],
     last_name=user_data['last_name'],
@@ -162,7 +163,7 @@ def index():
     # 'to': '<short code>', 
     # 'id': 'xxxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxx', 
     # 'date': '2019-10-02 15:12:34', 
-    # 'from': '+11234567890}
+    # 'from': '+11234567890'}
     try:
       from_user = data['from']
       print(from_user)
@@ -186,7 +187,7 @@ def index():
     elif cmd == 'members':
       list_of_members = get_members(from_user)
       print(list_of_members)
-      response = sms.send(list_of_members, [from_user])
+      response = sms.send(list_of_members, [int(from_user)])
       print(response)
     # TODO: support 'new' command for new members and funds
     else:
@@ -236,9 +237,8 @@ def members():
     return Response(json.dumps(results, default=str), mimetype='application/json')
 
   elif request.method == 'POST':
-    data = request.form.to_dict()
-    id = create_new_user(data)
-    result = { 'status': 200, 'user_id': id }
+    id = create_new_user(request.get_json())
+    result = { 'user_id': id }
     # TODO: prompt loan creation if loan_id was not given
     # TODO: request email confirmation if email was given
     return Response(json.dumps(result, default=str), mimetype='application/json')
@@ -251,6 +251,7 @@ def coops():
   for coop in coops:
     data.append(
       {
+        "id": coop.id,
         "name": coop.name,
         "start_date": coop.start_date,
         "end_date": coop.end_date,
@@ -279,6 +280,20 @@ def loans():
         'interest': loan.interest,
         'initial': loan.initial_balance,
         'remaining': loan.balance
+      }
+    )
+  results = {'data': data}
+  return Response(json.dumps(results), mimetype='application/json')
+
+@app.route('/roles', methods=['GET'])
+def roles():
+  roles = Role.query.all()
+  data = []
+  for role in roles:
+    data.append(
+      {
+        'name': role.name,
+        'id': role.id
       }
     )
   results = {'data': data}

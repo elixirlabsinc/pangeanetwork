@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import styled from 'styled-components';
 
 const ContentDiv = styled.div`
   background-color: #F6F9FC;
+  padding-top: 50px;
+  min-height: 80vh;
 `;
 
 const ContentArea = styled.div`
@@ -42,21 +45,32 @@ const HeaderField = styled.div`
   color: #262164;
 `;
 
-class Members extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: [],
-    };
+const NewButton = styled.a`
+  background: #262164;
+  box-shadow: 0px 4px 4px rgb(0 0 0 / 25%);
+  text-decoration: none;
+  color: white;
+  border-radius: 50%;
+  padding: 0px 20px 5px 20px;
+  font-size: 40px;
+  position: fixed;
+  right: 75px;
+  top: 250px;
+  :hover {
+    text-decoration: none;
+    color: white;
   }
+`
+
+class Members extends Component {
+  state = {
+    data: [],
+  };
 
   componentDidMount() {
-    fetch('http://localhost:5000/members')
+    axios.get('http://localhost:5000/members')
     .then(results => {
-      return results.json();
-    })
-    .then(results => {
-      this.setState({data: results.data});
+      this.setState({data: results.data.data});
     })
   }
 
@@ -64,6 +78,7 @@ class Members extends Component {
     return (
       <ContentDiv>
         <ContentArea>
+          <NewButton href="/members/new">+</NewButton>
           <CoopTable key='header'>
             <HeaderField>Name</HeaderField>
             <HeaderField>Co-Op</HeaderField>
