@@ -10,13 +10,18 @@ from app.models import User, CoOp, Role, Loan, Transaction
 import africastalking
 import json
 from flask import Flask
-from flaskext.mail import Mail
-from flaskext.mail import Message
+from flask_mail import Mail
+from flask_mail import Message
+from flask_bcrypt import Bcrypt
 import random
 import string
 
 
 app = create_app()
+
+# intialize flask password hashing library
+
+bcrypt = Bcrypt(app)
 
 username = "sandbox"
 api_key = os.environ.get('AT_API_KEY')
@@ -150,12 +155,16 @@ def confirm_transaction(from_user, msg):
       print('Encountered an error while sending: %s' % str(e))
 
 def create_new_user(user_data):
+  # create password hash
+  pw_hash = bcrypt.generate_password_hash(user_data['password'])
+
   new_user = User(
     first_name=user_data['first_name'],
     last_name=user_data['last_name'],
     email=user_data['email'],
     phone=user_data['phone'],
     active=True,
+    password=pw_hash,
     co_op_id=user_data['co_op_id'],
     role_id=user_data['role_id']
   )
@@ -300,8 +309,8 @@ def loans():
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
 
-@app.route('/passwordreset', methods=['POST'])
-def passwordReset():
+@app.route('/forgotpassword', methods=['POST'])
+def forgotPassword():
   '''
   Fill in sender email fields
   '''
@@ -330,6 +339,32 @@ def passwordReset():
 
   return Response(json.dumps({'status':'ok', 'email': body['email']}),mimetype='application/json')
 
+@app.route('/passwordreset', methods=['POST'])
+def passwordReset():
+  '''
+  Updates user's password based on json data sent from the client
+
+    Json data:
+      email (str): the email of the user
+      password (str): the password of the user
+  '''
+  content = request.json
+
+  data = []
+  users = User.query.all()
+
+  for user in users:
+    if(user.email == content['email']):
+      # hash password
+      pw_hash = bcrypt.generate_password_hash(content['password'])
+      user.password = pw_hash
+
+  db.session.commit()
+
+  results = {"code": 200, "status": "ok"}
+
+  return Response(json.dumps(results, default=str), mimetype='application/json')
+   
 
 if __name__ == '__main__':
   app.run()

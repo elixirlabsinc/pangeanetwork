@@ -3,6 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 import os
 from config import Config
+from flask_bcrypt import Bcrypt
 
 db = SQLAlchemy()
 
@@ -32,10 +33,11 @@ def build_sample_db(app):
   import random
   from app.models import User, CoOp, Role, Loan, Transaction 
 
-
   with app.app_context():
     db.drop_all()
     db.create_all()
+
+    bcrypt = Bcrypt(app)
 
     user_role = Role(name='member')
     super_user_role = Role(name='officer')
@@ -67,11 +69,15 @@ def build_sample_db(app):
     db.session.add(co_op_2)
     db.session.commit()
 
+    # create password hash
+    pw_hash = bcrypt.generate_password_hash('admin')
+    pw_hash1 = bcrypt.generate_password_hash('12345')
+
     admin_user = User(
       first_name='Admin',
       last_name='User',
       email='admin',
-      password='admin',
+      password=pw_hash,
       phone='254798745678',
       role_id=super_user_role.id,
       co_op_id=co_op_1.id
@@ -80,7 +86,7 @@ def build_sample_db(app):
       first_name='Test',
       last_name='User',
       email='test@user.com',
-      password='12345',
+      password=pw_hash1,
       phone='254987654321',
       role_id=user_role.id,
       co_op_id=co_op_1.id
