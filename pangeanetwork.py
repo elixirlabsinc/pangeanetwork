@@ -19,8 +19,6 @@ import string
 
 app = create_app()
 
-# intialize flask password hashing library
-
 bcrypt = Bcrypt(app)
 
 username = "sandbox"
@@ -269,25 +267,70 @@ def members():
     return Response(json.dumps(result, default=str), mimetype='application/json')
 
 
-@app.route('/coops', methods=['GET'])
+@app.route('/coops', methods=['GET', 'PUT'])
 def coops():
+  '''
+  GET: queries for all coops
+  PUT: updates an existing coop based on the name
+    Json data:
+      name (str): the name of the coop
+      start_date (str): the start date of the coop
+      end_date (str): the end date of the coop
+      location (str): the location of the coop
+      interest (float): the interest of the coop
+      intial_balance (float): the initial balance of the coop
+      current_balance (float): the current balance of the coop
+      expected_repayment (str): the expected repayment of the coop
+  '''
+
   data = []
   coops = CoOp.query.all()
-  for coop in coops:
-    data.append(
-      {
-        "name": coop.name,
-        "start_date": coop.start_date,
-        "end_date": coop.end_date,
-        "location": coop.location,
-        "interest": coop.interest,
-        "initial_balance": coop.initial_balance,
-        "current_balance": coop.current_balance,
-        "expected_repayment": coop.expected_repayment
-      }
-    )
-  results = {"data": data}
-  return Response(json.dumps(results), mimetype='application/json')
+
+  if(request.method == 'GET'):
+
+    for coop in coops:
+      data.append(
+        {
+          "name": coop.name,
+          "start_date": coop.start_date,
+          "end_date": coop.end_date,
+          "location": coop.location,
+          "interest": coop.interest,
+          "initial_balance": coop.initial_balance,
+          "current_balance": coop.current_balance,
+          "expected_repayment": coop.expected_repayment
+        }
+      )
+    results = {"data": data}
+    return Response(json.dumps(results), mimetype='application/json')
+  
+  elif(request.method == 'PUT'):
+    content = request.json
+    results = {}
+    isCoopExist = False
+
+
+    for coop in coops:
+      if(content['name'] == coop.name):
+        coop.name = content['name']
+        coop.start_date = content['start_date']
+        coop.end_date = content['end_date']
+        coop.location = content['location']
+        coop.initial_balance = content['initial_balance']
+        coop.current_balance = content['current_balance']
+        coop.expected_repayment = content['expected_repayment']
+        
+        db.session.commit()
+
+        isCoopExist = True
+
+        results = {"code": 200, "status": "ok"}
+        return Response(json.dumps(results), mimetype='application/json')
+
+    if(isCoopExist == False):
+        results = {"code": 404, "status": "coop not found"}
+        return Response(json.dumps(results), mimetype='application/json')
+
 
 
 @app.route('/loans', methods=['GET'])
