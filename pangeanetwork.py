@@ -352,6 +352,28 @@ def loans():
   results = {'data': data}
   return Response(json.dumps(results), mimetype='application/json')
 
+@app.route('/loan/<loanid>', methods=['GET'])
+def loan(loanid):
+  loans = Loan.query.all()
+  data = []
+  loanid = int(loanid)
+  for loan in loans:
+    if(loan.id == loanid):
+      user = User.query.filter(loan.user_id == User.id).first()
+      data.append(
+        {
+          'name': user.first_name + ' ' + user.last_name,
+          'start': loan.loan_start,
+          'end': loan.loan_end,
+          'interest': loan.interest,
+          'initial': loan.initial_balance,
+          'remaining': loan.balance
+        }
+      )
+  results = {'data': data}
+  return Response(json.dumps(results), mimetype='application/json')
+
+
 @app.route('/forgotpassword', methods=['POST'])
 def forgotPassword():
   '''
