@@ -105,3 +105,4 @@ def build_sample_db(app):
     db.session.commit()
 
   return
+>>>>>>> 7764b1d337fdf3d8d80ddc5c82bc23f637252122
