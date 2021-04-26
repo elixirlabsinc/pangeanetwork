@@ -3,3 +3,5 @@ Flask-Admin
 Flask-SQLAlchemy
 Flask-CORS
 africastalking
+Flask-Bcrypt
+Flask-Mail
