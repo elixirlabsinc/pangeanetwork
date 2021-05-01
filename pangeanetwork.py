@@ -277,21 +277,24 @@ def member(memberid):
 
   if(request.method == 'GET'):
     data = []
-    users = User.query.all()
-    for user in users:
-      if(user.id == memberid):
-        data.append(
-          {
-            "name": user.first_name + ' ' + user.last_name,
-            "coop": CoOp.query.filter(CoOp.id == user.co_op_id).first().name,
-            "phone": user.phone,
-            "role": Role.query.filter(Role.id == user.role_id).first().name,
-            "loan_balance": user.loan.balance if user.loan else 'N/A'
-          }
-        )
-    
-    results = {"data": data}
-    return Response(json.dumps(results, default=str), mimetype="application/json")
+    user = User.query.filter(memberid == User.id).first()
+    if(user):
+      data.append(
+        {
+          "name": user.first_name + ' ' + user.last_name,
+          "coop": CoOp.query.filter(CoOp.id == user.co_op_id).first().name,
+          "phone": user.phone,
+          "role": Role.query.filter(Role.id == user.role_id).first().name,
+          "loan_balance": user.loan.balance if user.loan else 'N/A'
+        }
+      )
+
+      results = {"data": data, "code": 200, "status": "ok"}
+      return Response(json.dumps(results, default=str), mimetype="application/json")
+    else:
+      results = {"code": "404", "status": "member not found"}
+      return Response(json.dumps(results, default=str), mimetype="application/json")
+
 
 @app.route('/coops', methods=['GET', 'PUT'])
 def coops():
