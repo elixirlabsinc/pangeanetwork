@@ -266,6 +266,35 @@ def members():
     # TODO: request email confirmation if email was given
     return Response(json.dumps(result, default=str), mimetype='application/json')
 
+@app.route('/member/<memberid>', methods=['GET'])
+def member(memberid):
+  '''
+  GET: queries the database for all the users and returns the member that matches the id sent as a parameter
+    parameter:
+      id: the id of the member
+  '''
+  memberid = int(memberid)
+
+  if(request.method == 'GET'):
+    data = []
+    user = User.query.filter(memberid == User.id).first()
+    if(user):
+      data.append(
+        {
+          "name": user.first_name + ' ' + user.last_name,
+          "coop": CoOp.query.filter(CoOp.id == user.co_op_id).first().name,
+          "phone": user.phone,
+          "role": Role.query.filter(Role.id == user.role_id).first().name,
+          "loan_balance": user.loan.balance if user.loan else 'N/A'
+        }
+      )
+
+      results = {"data": data, "code": 200, "status": "ok"}
+      return Response(json.dumps(results, default=str), mimetype="application/json")
+    else:
+      results = {"code": "404", "status": "member not found"}
+      return Response(json.dumps(results, default=str), mimetype="application/json")
+
 
 @app.route('/coops', methods=['GET', 'PUT'])
 def coops():
