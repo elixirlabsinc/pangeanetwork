@@ -239,9 +239,18 @@ def transactions():
   return Response(json.dumps(results, default=str), mimetype='application/json')
 
 
-@app.route('/members', methods=['GET', 'POST'])
+@app.route('/members', methods=['GET', 'POST', 'PUT'])
 def members():
-  if request.method == 'GET':
+  '''
+  PUT:
+    Json data:
+    - name
+    - coop
+    - phone
+    - role
+    - loan_balance
+  '''
+  if (request.method == 'GET'):
     data = []
     users = User.query.all()
     for user in users:
@@ -258,13 +267,33 @@ def members():
 
     return Response(json.dumps(results, default=str), mimetype='application/json')
 
-  elif request.method == 'POST':
+  elif (request.method == 'POST'):
     data = request.form.to_dict()
     id = create_new_user(data)
     result = { 'status': 200, 'user_id': id }
     # TODO: prompt loan creation if loan_id was not given
     # TODO: request email confirmation if email was given
     return Response(json.dumps(result, default=str), mimetype='application/json')
+
+  elif (request.method == 'PUT'):
+    content = request.json
+    # assume email field is unchanged
+    # may need to refactor later on
+    
+    user = User.query.filter(User.email == content['email']).first()
+    if(not user):
+      results = {'status': 'bad request, incorrect json data', 'code': '400'}
+      return Response(json.dumps(results, default=str), mimetype="application/json")
+    user.first_name = content['first_name']
+    user.last_name = content['last_name']
+    user.phone = content['phone']
+    user.active = content['active']
+
+    # update db
+    db.session.commit()
+    results = {'status': 'ok', 'code': 200}
+    return Response(json.dumps(results, default=str), mimetype="application/json")
+
 
 @app.route('/member/<memberid>', methods=['GET'])
 def member(memberid):
@@ -463,3 +492,4 @@ def passwordReset():
 
 if __name__ == '__main__':
   app.run()
+
