@@ -1,8 +1,11 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const ContentDiv = styled.div`
   background-color: #F6F9FC;
+  padding-top: 50px;
+  min-height: 80vh;
 `;
 
 const ContentArea = styled.div`
@@ -42,21 +45,16 @@ const HeaderField = styled.div`
   color: #262164;
 `;
 
-class RevolvingFund extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: [],
-    };
-  }
+class RevolvingFunds extends Component {
+  state = {
+    data: [],
+  };
 
   componentDidMount() {
-    fetch('http://localhost:5000/revolving_fund')
+    console.log('fetching revolving_funds')
+    axios.get('http://localhost:5002/revolving_funds')
     .then(results => {
-      return results.json();
-    })
-    .then(results => {
-      this.setState({data: results.data});
+      this.setState({data: results.data.revolving_funds});
     })
   }
 
@@ -65,23 +63,16 @@ class RevolvingFund extends Component {
       <ContentDiv>
         <ContentArea>
           <CoopTable key='header'>
-            <HeaderField>Name</HeaderField>
-            <HeaderField>Start Date</HeaderField>
-            <HeaderField>End Date</HeaderField>
-            <HeaderField>Interest Rate</HeaderField>
+            <HeaderField>User</HeaderField>
             <HeaderField>Initial Balance</HeaderField>
-            <HeaderField>Remaining Balance</HeaderField>
+            <HeaderField>Current Balance</HeaderField>
           </CoopTable>
-            {this.state.data.map(({name, start, end,
-            interest, initial, remaining}) => {
+            {this.state.data.map(({id, user, initial_balance, balance}) => {
               return (
-                <CoopTable key={name}>
-                  <CoopField>{name}</CoopField>
-                  <CoopField>{start}</CoopField>
-                  <CoopField>{end}</CoopField>
-                  <CoopField>{interest}</CoopField>
-                  <CoopField>{initial}</CoopField>
-                  <CoopField>{interest}</CoopField>
+                <CoopTable key={id}>
+                  <CoopField>{user}</CoopField>
+                  <CoopField>{initial_balance}</CoopField>
+                  <CoopField>{balance}</CoopField>
                 </CoopTable>
               )
             })}
@@ -91,4 +82,4 @@ class RevolvingFund extends Component {
   }
 }
 
-export default RevolvingFund;
+export default RevolvingFunds;

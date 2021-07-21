@@ -57,17 +57,18 @@ class MembersForm extends Component {
     co_op_id: '',
     role_id: '',
     roles: [],
-    coops: []
+    coops: [],
+    fund_balance: ''
   };
 
   componentDidMount = () => {
-    axios.get('http://localhost:5000/roles')
+    axios.get('http://localhost:5002/roles')
     .then(results => {
-      this.setState({roles: results.data.data});
+      this.setState({roles: results.data.roles});
     })
-    axios.get('http://localhost:5000/coops')
+    axios.get('http://localhost:5002/co_ops')
     .then(results => {
-      this.setState({coops: results.data.data});
+      this.setState({coops: results.data.co_ops});
     })
   }
 
@@ -82,16 +83,19 @@ class MembersForm extends Component {
       email: this.state.email,
       phone: this.state.phone,
       co_op_id: this.state.co_op_id,
-      role_id: this.state.role_id
+      role_id: this.state.role_id,
+      fund_balance: this.state.fund_balance
     }
-    axios.post('http://localhost:5000/members', payload)
+    axios.post('http://localhost:5002/members', payload)
       .then(result => {
         console.log(result);
         if (result.status === 200) {
           window.location.assign('/members')
         }
-        }
-      )
+      })
+      .catch(e => {
+        console.log(e.message);
+      })
   }
 
   render() {
@@ -143,6 +147,14 @@ class MembersForm extends Component {
                     items={this.state.roles}
                     placeholder='Role'
                   />
+                </div>
+              </div>
+            </FormRow>
+            <FormRow>
+              <div className='row'>
+                <div className='col-md-6'>
+                  <FormLabel>Revolving Fund Initial Balance</FormLabel>
+                  <FormInput value={this.state.fund_balance} onChange={(event) => this.handleChange({fund_balance: event.target.value})} className='form-control'></FormInput>
                 </div>
               </div>
             </FormRow>

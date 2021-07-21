@@ -68,9 +68,10 @@ class Members extends Component {
   };
 
   componentDidMount() {
-    axios.get('http://localhost:5000/members')
+    console.log('fetching members')
+    axios.get('http://localhost:5002/members')
     .then(results => {
-      this.setState({data: results.data.data});
+      this.setState({data: results.data.members});
     })
   }
 
@@ -86,14 +87,14 @@ class Members extends Component {
             <HeaderField>Role</HeaderField>
             <HeaderField>Loan Balance</HeaderField>
           </CoopTable>
-            {this.state.data.map(({name, coop, phone, role, loan_balance}) => {
+            {this.state.data.map(({name, co_op, phone, role, revolving_fund_balance}) => {
               return (
                 <CoopTable key={name}>
                   <CoopField>{name}</CoopField>
-                  <CoopField>{coop}</CoopField>
+                  <CoopField>{co_op}</CoopField>
                   <CoopField>{phone}</CoopField>
                   <CoopField>{role}</CoopField>
-                  <CoopField>{loan_balance}</CoopField>
+                  <CoopField>{revolving_fund_balance}</CoopField>
                 </CoopTable>
               )
             })}

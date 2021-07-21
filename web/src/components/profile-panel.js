@@ -29,7 +29,7 @@ class ProfilePanel extends Component {
   render() {
     return (
       <ProfilePanelDiv href="/">
-        <ProfileLink>Jamie Liao</ProfileLink>
+        <ProfileLink>Admin User</ProfileLink>
         <ProfileIcon src={profileIcon} />
       </ProfilePanelDiv>
     );

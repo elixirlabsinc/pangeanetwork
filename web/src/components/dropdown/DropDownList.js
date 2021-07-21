@@ -20,8 +20,6 @@ class DropDownList extends React.Component {
 
   render() {
     const { value, onSelect, items, placeholder } = this.props;
-    console.log(value);
-    console.log(items);
     const label = value ? items.find(item => { return item.id === value; }).name : ''
 
     return (

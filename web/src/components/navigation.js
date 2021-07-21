@@ -58,7 +58,7 @@ class Navigation extends Component {
             <NavigationLink href="/transactions">Transactions</NavigationLink>
           </NavigationListItem>
         <NavigationListItem>
-            <NavigationLink href="/loans">Loans</NavigationLink>
+            <NavigationLink href="/revolving_funds">Revolving Funds</NavigationLink>
           </NavigationListItem>
       </NavigationList>
     );

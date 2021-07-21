@@ -1,0 +1,50 @@
+version: '3.6'
+
+services:
+  db:
+    environment:
+      POSTGRES_USER: pangea
+      POSTGRES_PASSWORD: dev
+      POSTGRES_DB: pangea
+    image: postgres:latest
+    networks:
+      - pangea
+    ports:
+      - 5439:5432
+    restart: always
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/data
+  
+  api:
+    build: ./api
+    user: pangea
+    depends_on:
+      - db
+    environment:
+      STAGE: dev
+      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://pangea:dev@db/pangea
+      SQLALCHEMY_TRACK_MODIFICATIONS: 0
+      AT_API_KEY: fill
+    networks:
+      - pangea
+    ports:
+      - 5002:5000
+    volumes:
+      - ./api:/opt/api
+    restart: always
+
+  web:
+    build: ./web
+    user: pangea
+    depends_on:
+      - api
+    networks:
+      - pangea
+    ports:
+      - 3001:3000
+    stdin_open: true
+    volumes:
+      - ./web:/opt/web
+
+networks:
+  pangea:

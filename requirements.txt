@@ -1,5 +1,0 @@
-Flask
-Flask-Admin
-Flask-SQLAlchemy
-Flask-CORS
-africastalking

@@ -1,8 +1,11 @@
+import axios from 'axios';
 import React, { Component } from 'react';
 import styled from 'styled-components';
 
 const ContentDiv = styled.div`
   background-color: #F6F9FC;
+  padding-top: 50px;
+  min-height: 80vh;
 `;
 
 const ContentArea = styled.div`
@@ -43,20 +46,14 @@ const HeaderField = styled.div`
 `;
 
 class Transactions extends Component {
-  constructor() {
-    super();
-    this.state = {
-      data: [],
-    };
-  }
+  state = {
+    data: [],
+  };
 
   componentDidMount() {
-    fetch('http://localhost:5000/transactions')
+    axios.get('http://localhost:5002/transactions')
     .then(results => {
-      return results.json();
-    })
-    .then(results => {
-      this.setState({data: results.data});
+      this.setState({data: results.data.transactions});
     })
   }
 
@@ -72,10 +69,10 @@ class Transactions extends Component {
             <HeaderField>Status</HeaderField>
             <HeaderField>Timestamp</HeaderField>
           </CoopTable>
-            {this.state.data.map(({user_name, amount, previous_balance, new_balance, state, timestamp}) => {
+            {this.state.data.map(({user, amount, previous_balance, new_balance, state, timestamp}) => {
               return (
                 <CoopTable key={timestamp}>
-                  <CoopField>{user_name}</CoopField>
+                  <CoopField>{user}</CoopField>
                   <CoopField>{amount}</CoopField>
                   <CoopField>{previous_balance}</CoopField>
                   <CoopField>{new_balance}</CoopField>
