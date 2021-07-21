@@ -5,3 +5,4 @@ web/node_modules
 app/__pycache__
 .vscode/
 __pycache__/
+postgres-data/
